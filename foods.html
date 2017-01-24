@@ -5,6 +5,7 @@
   <title>Quantified Self - Manage Foods</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <script src="main.bundle.js"></script>
@@ -15,11 +16,13 @@
       <div class="food-label">
         <div><label for="food-name">Name</label></div>
         <input type="text" id="food-name" name="food-name" class="food-input">
+        <p id="food-warning"></p>
       </div>
 
       <div class="food-label">
         <div><label for="food-calories">Calories</label></div>
         <input type="number" id="food-calories" name="food-calories" class="food-input">
+        <p id="calories-warning"></p>
       </div>
 
       <input type="submit" id= "add-food" name="" value="Add Food" style="float: right; position: relative;">
@@ -45,56 +48,5 @@
   </table>
 
 </body>
-<script type="text/javascript">
-  $(document).ready(function(){
-
-    var $foodFilter = $('#food-fiter').val();
-    var $table = $('#food-table');
-
-    $("#add-food").on("click", function(e){
-      e.preventDefault();
-
-      var $fName = $("#food-name").val();
-      var $fCalories = $("#food-calories").val();
-      var validFood = validateFood($fName, $fCalories);
-
-      if(validFood){
-        var deleteButton = "<td><button type='button' name='button'>Delete</button></td>"
-        var foodData = '<tr><td>' + $fName + '</td><td>' + $fCalories + '</td>' + deleteButton + '</tr>'
-
-        $('#food-table > tbody > tr:first').before(foodData);
-      }
-    });
-
-    function validateFood(food, calories){
-      if (food.trim() == '') {
-        alert("Please enter a food name.");
-        return false;
-      } else if (calories.trim() == ''){
-        alert("Please enter calories.");
-        return false;
-      } else {
-        return true;
-      }
-    }
-
-    $("#food-filter").keyup(function () {
-      var rows = $("#food-body").find("tr").hide();
-
-      if (this.value.length) {
-        var data = this.value.split(" ");
-
-        $.each(data, function (index, value) {
-          rows.filter(function(){
-            return $(this).text().toLowerCase().indexOf(value.toLowerCase()) > -1;
-          }).show();
-        });
-      } else {
-        rows.show();
-      }
-    });
-
-  });
-
-</script>
+<script src="lib/foods.js"></script>
 </html>
