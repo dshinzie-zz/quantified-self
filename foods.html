@@ -80,12 +80,18 @@
 
     $("#food-filter").keyup(function () {
       var rows = $("#food-body").find("tr").hide();
+
       if (this.value.length) {
-          var data = this.value.split(" ");
-          $.each(data, function (i, v) {
-              rows.filter(":contains('" + v + "')").show();
-          });
-      } else rows.show();
+        var data = this.value.split(" ");
+
+        $.each(data, function (index, value) {
+          rows.filter(function(){
+            return $(this).text().toLowerCase().indexOf(value.toLowerCase()) > -1;
+          }).show();
+        });
+      } else {
+        rows.show();
+      }
     });
 
   });
