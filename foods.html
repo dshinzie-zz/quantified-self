@@ -5,6 +5,7 @@
   <title>Quantified Self - Manage Foods</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <script src="main.bundle.js"></script>
@@ -61,7 +62,7 @@
       var validFood = validateFood($fName, $fCalories);
 
       if(validFood){
-        var deleteButton = "<td><button type='button' name='button'>Delete</button></td>"
+        var deleteButton = "<td><i class='material-icons'>delete</i></td>"
         var foodData = '<tr><td>' + $fName + '</td><td>' + $fCalories + '</td>' + deleteButton + '</tr>'
 
         $('#food-table > tbody > tr:first').before(foodData);
