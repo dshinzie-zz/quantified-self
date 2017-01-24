@@ -67,7 +67,10 @@
     });
 
     function validateFood(food, calories){
-      if (calories.trim() == ''){
+      if (food.trim() == '') {
+        alert("Please enter a food name.");
+        return false;
+      } else if (calories.trim() == ''){
         alert("Please enter calories.");
         return false;
       } else {
@@ -83,7 +86,7 @@
               rows.filter(":contains('" + v + "')").show();
           });
       } else rows.show();
-  });
+    });
 
   });
 
