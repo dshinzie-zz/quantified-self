@@ -1,0 +1,19 @@
+.food-label {
+  display: block;
+}
+
+#food-table {
+  border: 1px solid;
+}
+
+.food-table-header {
+  background-color: #d3d3d3;
+}
+
+.food-input,
+.food-input-container {
+  width: 300px;
+}
+
+.food-input-container {
+}

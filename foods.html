@@ -4,20 +4,35 @@
   <meta charset="utf-8">
   <title>Quantified Self - Manage Foods</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <script src="main.bundle.js"></script>
-  <!-- <form class=""> -->
-    <label for="food-name">Name</label>
-    <input type="text" id="food-name" name="food-name" value="">
-    <label for="food-calories">Calories</label>
-    <input type="number" id="food-calories" name="food-calories" value="">
-    <input type="submit" id= "add-food" name="" value="Add Food">
-  <!-- </form> -->
-  <label for="food-filter">Filter by Name</label>
-  <input type="text" name="food-filter" value="">
+
+  <h3>Manage Foods</h3>
+  <form class="" action="foods.html" method="post" class="food-input-container">
+    <div class="food-input-container">
+      <div class="food-label">
+        <div><label for="food-name">Name</label></div>
+        <input type="text" id="food-name" name="food-name" class="food-input">
+      </div>
+
+      <div class="food-label">
+        <div><label for="food-calories">Calories</label></div>
+        <input type="number" id="food-calories" name="food-calories" class="food-input">
+      </div>
+
+      <input type="submit" id= "add-food" name="" value="Add Food" style="float: right; position: relative;">
+    </div>
+  </form>
+
+  <div class="food-label">
+    <div><label for="food-filter">Filter by Name</label></div>
+    <input type="text" name="food-filter" value="">
+  </div>
+
   <table id="food-table">
-    <thead>
+    <thead class="food-table-header">
       <tr>
         <th>Name</th>
         <th>Calories</th>
@@ -28,10 +43,13 @@
       </tr>
     </tbody>
   </table>
+
 </body>
 <script type="text/javascript">
   $(document).ready(function(){
-    $("#add-food").on("click", function(){
+    $("#add-food").on("click", function(e){
+      e.preventDefault();
+
       var $fName = $("#food-name").val();
       var $fCalories = $("#food-calories").val();
       var validFood = validateFood($fName, $fCalories);
