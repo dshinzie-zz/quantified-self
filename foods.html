@@ -15,11 +15,13 @@
       <div class="food-label">
         <div><label for="food-name">Name</label></div>
         <input type="text" id="food-name" name="food-name" class="food-input">
+        <p id="food-warning"></p>
       </div>
 
       <div class="food-label">
         <div><label for="food-calories">Calories</label></div>
         <input type="number" id="food-calories" name="food-calories" class="food-input">
+        <p id="calories-warning"></p>
       </div>
 
       <input type="submit" id= "add-food" name="" value="Add Food" style="float: right; position: relative;">
@@ -68,10 +70,11 @@
 
     function validateFood(food, calories){
       if (food.trim() == '') {
-        alert("Please enter a food name.");
+        // alert("Please enter a food name.");
+        $('#food-warning').append("Please enter a food name.");
         return false;
       } else if (calories.trim() == ''){
-        alert("Please enter calories.");
+        $('#calories-warning').append("Please enter a calorie amount.");
         return false;
       } else {
         return true;
