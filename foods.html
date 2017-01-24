@@ -3,9 +3,61 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Manage Foods</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-
   <script src="main.bundle.js"></script>
+  <!-- <form class=""> -->
+    <label for="food-name">Name</label>
+    <input type="text" id="food-name" name="food-name" value="">
+    <label for="food-calories">Calories</label>
+    <input type="number" id="food-calories" name="food-calories" value="">
+    <input type="submit" id= "add-food" name="" value="Add Food">
+  <!-- </form> -->
+  <label for="food-filter">Filter by Name</label>
+  <input type="text" name="food-filter" value="">
+  <table id="food-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Calories</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Test food</td>
+        <td>Test calories</td>
+        <td><button type="button" name="button">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
 </body>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var $fName = $("#food-name").val();
+    var $fCalories = $("#food-calories").val();
+
+    $("#add-food").on("click", function(){
+      if (validateFood() == true){
+        var deleteButton = "<td><button type='button' name='button'>Delete</button></td>"
+        var foodData = '<tr><td>' + $fName + '</td><td>' + $fCalories + '</td>' + deleteButton + '</tr>'
+
+        $('#food-table tr:last').before(foodData);
+      };
+    });
+
+    function validateFood(){
+      if ($fName == ''){
+        alert("Please enter a food name.");
+        return false;
+      } else if ($fCalories == ''){
+        alert("Please enter calories.");
+        return false;
+      } else {
+        return true;
+      }
+    }
+  });
+
+</script>
 </html>
