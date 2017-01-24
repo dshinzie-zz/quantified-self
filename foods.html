@@ -76,27 +76,14 @@
     }
 
     $("#food-filter").keyup(function () {
-        var data = this.value.split(" ");
-        var jo = $("#food-body").find("tr");
-
-        if (this.value == "") {
-            jo.show();
-            return;
-        }
-
-        jo.hide();
-
-        jo.filter(function (i, v) {
-            var $t = $(this);
-            for (var d = 0; d < data.length; ++d) {
-                if ($t.is(":contains('" + data[d] + "')")) {
-                    return true;
-                }
-            }
-            return false;
-        })
-        .show();
-    });
+      var rows = $("#food-body").find("tr").hide();
+      if (this.value.length) {
+          var data = this.value.split(" ");
+          $.each(data, function (i, v) {
+              rows.filter(":contains('" + v + "')").show();
+          });
+      } else rows.show();
+  });
 
   });
 
