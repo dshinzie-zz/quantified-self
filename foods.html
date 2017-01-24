@@ -28,7 +28,7 @@
 
   <div class="food-label">
     <div><label for="food-filter">Filter by Name</label></div>
-    <input type="text" name="food-filter" value="">
+    <input type="text" name="food-filter" id="food-filter" value="">
   </div>
 
   <table id="food-table">
@@ -38,7 +38,7 @@
         <th>Calories</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="food-body">
       <tr>
       </tr>
     </tbody>
@@ -47,6 +47,10 @@
 </body>
 <script type="text/javascript">
   $(document).ready(function(){
+
+    var $foodFilter = $('#food-fiter').val();
+    var $table = $('#food-table');
+
     $("#add-food").on("click", function(e){
       e.preventDefault();
 
@@ -63,16 +67,36 @@
     });
 
     function validateFood(food, calories){
-      if (food == ''){
-        alert("Please enter a food name.");
-        return false;
-      } else if (calories == ''){
+      if (calories.trim() == ''){
         alert("Please enter calories.");
         return false;
       } else {
         return true;
       }
     }
+
+    $("#food-filter").keyup(function () {
+        var data = this.value.split(" ");
+        var jo = $("#food-body").find("tr");
+
+        if (this.value == "") {
+            jo.show();
+            return;
+        }
+
+        jo.hide();
+
+        jo.filter(function (i, v) {
+            var $t = $(this);
+            for (var d = 0; d < data.length; ++d) {
+                if ($t.is(":contains('" + data[d] + "')")) {
+                    return true;
+                }
+            }
+            return false;
+        })
+        .show();
+    });
 
   });
 
