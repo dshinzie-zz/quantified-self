@@ -34,29 +34,31 @@
 </body>
 <script type="text/javascript">
   $(document).ready(function(){
-    var $fName = $("#food-name").val();
-    var $fCalories = $("#food-calories").val();
-
     $("#add-food").on("click", function(){
-      if (validateFood() == true){
+      var $fName = $("#food-name").val();
+      var $fCalories = $("#food-calories").val();
+      var validFood = validateFood($fName, $fCalories);
+
+      if(validFood){
         var deleteButton = "<td><button type='button' name='button'>Delete</button></td>"
         var foodData = '<tr><td>' + $fName + '</td><td>' + $fCalories + '</td>' + deleteButton + '</tr>'
 
         $('#food-table tr:last').before(foodData);
-      };
+      }
     });
 
-    function validateFood(){
-      if ($fName == ''){
+    function validateFood(food, calories){
+      if (food == ''){
         alert("Please enter a food name.");
         return false;
-      } else if ($fCalories == ''){
+      } else if (calories == ''){
         alert("Please enter calories.");
         return false;
       } else {
         return true;
       }
     }
+
   });
 
 </script>
