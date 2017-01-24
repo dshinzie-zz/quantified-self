@@ -25,9 +25,6 @@
     </thead>
     <tbody>
       <tr>
-        <td>Test food</td>
-        <td>Test calories</td>
-        <td><button type="button" name="button">Delete</button></td>
       </tr>
     </tbody>
   </table>
@@ -43,7 +40,7 @@
         var deleteButton = "<td><button type='button' name='button'>Delete</button></td>"
         var foodData = '<tr><td>' + $fName + '</td><td>' + $fCalories + '</td>' + deleteButton + '</tr>'
 
-        $('#food-table tr:last').before(foodData);
+        $('#food-table > tbody > tr:first').before(foodData);
       }
     });
 
