@@ -1,17 +1,21 @@
-.food-label {
+.food-label,
+.exercise-label {
   display: block;
 }
 
-#food-table {
+#food-table, #exercise-table {
   border: 1px solid;
 }
 
-.food-table-header {
+.food-table-header,
+.exercise-table-header {
   background-color: #d3d3d3;
 }
 
 .food-input,
-.food-input-container {
+.food-input-container,
+.exercise-input,
+.exercise-input-container {
   width: 300px;
 }
 
