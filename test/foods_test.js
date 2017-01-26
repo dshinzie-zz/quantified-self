@@ -158,7 +158,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('allows me to edit a food', function(){
+  test.it('allows me to edit a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var name = driver.findElement({id: 'food-name'});
@@ -171,19 +171,16 @@ test.describe('testing foods', function() {
 
     driver.sleep(1000);
 
-    name.click().then(function(event){
-
-    });
-
-    name.sendKeys('orange').then(function(){
-      name.sendKeys(webdriver.Key.ENTER);
-    });
-
+    var newName = driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'});
+    newName.click();
+    newName.clear();
+    newName.sendKeys('orange');
+    newName.sendKeys(webdriver.Key.ENTER);
 
     driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(event){
       assert.equal(event, 'orange')
-    })
-  })
+    });
+  });
 
 });
