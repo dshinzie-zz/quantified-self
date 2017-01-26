@@ -16,7 +16,7 @@ test.describe('testing foods', function() {
     driver.quit();
   })
 
-  test.it('requires a name for adding a food', function(){
+  test.xit('requires a name for adding a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var calories = driver.findElement({id: 'food-calories'});
@@ -31,7 +31,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.it('requires calories for adding a food', function(){
+  test.xit('requires calories for adding a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var name = driver.findElement({id: 'food-name'});
@@ -91,7 +91,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.it('should allow me to delete a food', function() {
+  test.xit('should allow me to delete a food', function() {
 
     driver.get('http://localhost:8080/foods.html');
 
@@ -113,5 +113,33 @@ test.describe('testing foods', function() {
       assert.equal(0, event);
     });
   });
+
+  test.xit('allows me to edit a food', function(){
+    driver.get('http://localhost:8080/foods.html');
+
+    var name = driver.findElement({id: 'food-name'});
+    var calories = driver.findElement({id: 'food-calories'});
+    var submitButton = driver.findElement({id: 'add-food'});
+
+    name.sendKeys('apple');
+    calories.sendKeys('100');
+    submitButton.click();
+
+    driver.sleep(1000);
+
+    name.click().then(function(event){
+
+    });
+
+    name.sendKeys('orange').then(function(){
+      name.sendKeys(webdriver.Key.ENTER);
+    });
+
+
+    driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'orange')
+    })
+  })
 
 });
