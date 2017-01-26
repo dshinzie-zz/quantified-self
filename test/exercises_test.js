@@ -140,7 +140,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('allows me to edit an exercise', function(){
+  test.it('allows me to edit an exercise after pressing enter', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     createExercise(driver, "run", 200);
@@ -153,7 +153,24 @@ test.describe('testing exercises', function() {
 
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(event){
-      assert.equal(event, 'lift')
+      assert.equal(event, 'lift');
+    });
+  });
+
+  test.it('allows me to edit an exercise after clicking out', function(){
+    driver.get('http://localhost:8080/exercises.html');
+
+    createExercise(driver, "run", 200);
+
+    var newName = driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'});
+    newName.click();
+    newName.clear();
+    newName.sendKeys('lift');
+    driver.findElement({id: 'exercise-name'}).click();
+
+    driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'lift');
     });
   });
 
