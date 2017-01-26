@@ -16,7 +16,7 @@ test.describe('testing exercises', function() {
     driver.quit();
   })
 
-  test.xit('requires a name for adding an exercise', function(){
+  test.it('requires a name for adding an exercise', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     var calories = driver.findElement({id: 'exercise-calories'});
@@ -31,7 +31,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.xit('requires calories for adding an exercise', function(){
+  test.it('requires calories for adding an exercise', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     var name = driver.findElement({id: 'exercise-name'});
@@ -46,7 +46,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.xit('should allow me to add a name and a calories', function() {
+  test.it('should allow me to add a name and a calories', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 
@@ -65,7 +65,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.xit('should allow me to create an exercise', function() {
+  test.it('should allow me to create an exercise', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 
@@ -90,17 +90,18 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.xit('exercises should persist upon browser refresh', function(){
+  test.it('exercises should persist upon browser refresh', function(){
     driver.get('http://localhost:8080/exercises.html');
 
-    driver.executeScript("window.localStorage.setItem('exercise-calories', '[{name: 'running', calories: '100'}]')");
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
 
     driver.get("http://localhost:8080/exercises.html");
-    driver.executeScript("return window.localStorage.getItem('exercise-calories')")
+    driver.executeScript("return window.localStorage.getItem('exercise-calories');")
     .then(function(exercisesCalories){
-      assert.equal(exercisesCalories, "[{name: 'running', calories: '100'}]");
+      assert.equal(exercisesCalories, calArray);
     });
-  })
+  });
 
   test.it('clears fields and warnings after an exercise successfully saves', function(){
     driver.get('http://localhost:8080/exercises.html');
@@ -133,7 +134,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.xit('should allow me to delete an exercise', function() {
+  test.it('should allow me to delete an exercise', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 

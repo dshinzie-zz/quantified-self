@@ -16,7 +16,7 @@ test.describe('testing foods', function() {
     driver.quit();
   })
 
-  test.xit('requires a name for adding a food', function(){
+  test.it('requires a name for adding a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var calories = driver.findElement({id: 'food-calories'});
@@ -31,7 +31,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('requires calories for adding a food', function(){
+  test.it('requires calories for adding a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var name = driver.findElement({id: 'food-name'});
@@ -47,7 +47,7 @@ test.describe('testing foods', function() {
   });
 
 
-  test.xit('should allow me to add a name and a calories', function() {
+  test.it('should allow me to add a name and a calories', function() {
 
     driver.get('http://localhost:8080/foods.html');
 
@@ -66,7 +66,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('should allow me to create a food', function() {
+  test.it('should allow me to create a food', function() {
 
     driver.get('http://localhost:8080/foods.html');
 
@@ -88,6 +88,19 @@ test.describe('testing foods', function() {
     driver.findElement({css: '#food-table tbody tr td:nth-of-type(2)'})
     .getText().then(function(textValue) {
       assert.equal(textValue, "100");
+    });
+  });
+
+  test.it('foods should persist upon browser refresh', function(){
+    driver.get('http://localhost:8080/foods.html');
+
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get("http://localhost:8080/foods.html");
+    driver.executeScript("return window.localStorage.getItem('food-calories');")
+    .then(function(foodsCalories){
+      assert.equal(foodsCalories, calArray);
     });
   });
 
@@ -122,7 +135,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('should allow me to delete a food', function() {
+  test.it('should allow me to delete a food', function() {
 
     driver.get('http://localhost:8080/foods.html');
 
