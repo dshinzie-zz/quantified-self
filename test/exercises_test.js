@@ -69,15 +69,7 @@ test.describe('testing exercises', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 
-    var name = driver.findElement({id: 'exercise-name'});
-    var calories = driver.findElement({id: 'exercise-calories'});
-    var submitButton = driver.findElement({id: 'add-exercise'});
-
-    name.sendKeys('running');
-    calories.sendKeys('100');
-    submitButton.click();
-
-    driver.sleep(1000);
+    createExercise(driver, "running", 100);
 
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(textValue) {
@@ -135,18 +127,9 @@ test.describe('testing exercises', function() {
   });
 
   test.it('should allow me to delete an exercise', function() {
-
     driver.get('http://localhost:8080/exercises.html');
 
-    var name = driver.findElement({id: 'exercise-name'});
-    var calories = driver.findElement({id: 'exercise-calories'});
-    var submitButton = driver.findElement({id: 'add-exercise'});
-
-    name.sendKeys('running');
-    calories.sendKeys('100');
-    submitButton.click();
-
-    driver.sleep(1000);
+    createExercise(driver, "run", 200);
 
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(3)'})
     .click();
@@ -157,18 +140,10 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('allows me to edit an exercise', function(){
+  test.it('allows me to edit an exercise after pressing enter', function(){
     driver.get('http://localhost:8080/exercises.html');
 
-    var name = driver.findElement({id: 'exercise-name'});
-    var calories = driver.findElement({id: 'exercise-calories'});
-    var submitButton = driver.findElement({id: 'add-exercise'});
-
-    name.sendKeys('run');
-    calories.sendKeys('300');
-    submitButton.click();
-
-    driver.sleep(1000);
+    createExercise(driver, "run", 200);
 
     var newName = driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'});
     newName.click();
@@ -178,7 +153,50 @@ test.describe('testing exercises', function() {
 
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(event){
-      assert.equal(event, 'lift')
+      assert.equal(event, 'lift');
     });
   });
+
+  test.it('allows me to edit an exercise after clicking out', function(){
+    driver.get('http://localhost:8080/exercises.html');
+
+    createExercise(driver, "run", 200);
+
+    var newName = driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'});
+    newName.click();
+    newName.clear();
+    newName.sendKeys('lift');
+    driver.findElement({id: 'exercise-name'}).click();
+
+    driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'lift');
+    });
+  });
+
+  test.it('allows me to filter an exercise', function(){
+    driver.get('http://localhost:8080/exercises.html');
+    var filterBox = driver.findElement({css: '#exercise-filter'});
+
+    createExercise(driver, "run", 200);
+    createExercise(driver, "jog", 100);
+
+    filterBox.sendKeys("jo");
+
+    driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'jog');
+    });
+  });
+
+  function createExercise(driver, nameKeys, calorieKeys){
+    var name = driver.findElement({id: 'exercise-name'});
+    var calories = driver.findElement({id: 'exercise-calories'});
+    var submitButton = driver.findElement({id: 'add-exercise'});
+
+    name.sendKeys(nameKeys);
+    calories.sendKeys(calorieKeys);
+    submitButton.click();
+  }
+
 });

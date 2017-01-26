@@ -67,18 +67,9 @@ test.describe('testing foods', function() {
   });
 
   test.it('should allow me to create a food', function() {
-
     driver.get('http://localhost:8080/foods.html');
 
-    var name = driver.findElement({id: 'food-name'});
-    var calories = driver.findElement({id: 'food-calories'});
-    var submitButton = driver.findElement({id: 'add-food'});
-
-    name.sendKeys('apple');
-    calories.sendKeys('100');
-    submitButton.click();
-
-    driver.sleep(1000);
+    createFood(driver, "apple", 100);
 
     driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(textValue) {
@@ -136,18 +127,9 @@ test.describe('testing foods', function() {
   });
 
   test.it('should allow me to delete a food', function() {
-
     driver.get('http://localhost:8080/foods.html');
 
-    var name = driver.findElement({id: 'food-name'});
-    var calories = driver.findElement({id: 'food-calories'});
-    var submitButton = driver.findElement({id: 'add-food'});
-
-    name.sendKeys('apple');
-    calories.sendKeys('100');
-    submitButton.click();
-
-    driver.sleep(1000);
+    createFood(driver, "apple", 200);
 
     driver.findElement({css: '#food-table tbody tr td:nth-of-type(3)'})
     .click();
@@ -158,18 +140,10 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.it('allows me to edit a food', function(){
+  test.it('allows me to edit a food after pressing enter', function(){
     driver.get('http://localhost:8080/foods.html');
 
-    var name = driver.findElement({id: 'food-name'});
-    var calories = driver.findElement({id: 'food-calories'});
-    var submitButton = driver.findElement({id: 'add-food'});
-
-    name.sendKeys('apple');
-    calories.sendKeys('100');
-    submitButton.click();
-
-    driver.sleep(1000);
+    createFood(driver, "apple", 200);
 
     var newName = driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'});
     newName.click();
@@ -179,8 +153,50 @@ test.describe('testing foods', function() {
 
     driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(event){
-      assert.equal(event, 'orange')
+      assert.equal(event, 'orange');
     });
   });
+
+  test.it('allows me to edit a food after clicking out', function(){
+    driver.get('http://localhost:8080/foods.html');
+
+    createFood(driver, "apple", 200);
+
+    var newName = driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'});
+    newName.click();
+    newName.clear();
+    newName.sendKeys('orange');
+    driver.findElement({id: 'food-name'}).click();
+
+    driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'orange');
+    });
+  });
+
+  test.it('allows me to filter a food', function(){
+    driver.get('http://localhost:8080/foods.html');
+    var filterBox = driver.findElement({css: '#food-filter'});
+
+    createFood(driver, "orange", 200);
+    createFood(driver, "apple", 100);
+
+    filterBox.sendKeys("ap");
+
+    driver.findElement({css: '#food-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'apple');
+    });
+  });
+
+  function createFood(driver, nameKeys, calorieKeys){
+    var name = driver.findElement({id: 'food-name'});
+    var calories = driver.findElement({id: 'food-calories'});
+    var submitButton = driver.findElement({id: 'add-food'});
+
+    name.sendKeys(nameKeys);
+    calories.sendKeys(calorieKeys);
+    submitButton.click();
+  }
 
 });
