@@ -91,6 +91,50 @@ test.describe('testing foods', function() {
     });
   });
 
+  test.it('foods should persist upon browser refresh', function(){
+    driver.get('http://localhost:8080/foods.html');
+
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get("http://localhost:8080/foods.html");
+    driver.executeScript("return window.localStorage.getItem('food-calories');")
+    .then(function(foodsCalories){
+      assert.equal(foodsCalories, calArray);
+    });
+  });
+
+  test.it('clears fields and warnings after a food successfully saves', function(){
+    driver.get('http://localhost:8080/foods.html');
+
+    var name = driver.findElement({id: 'food-name'});
+    var calories = driver.findElement({id: 'food-calories'});
+    var submitButton = driver.findElement({id: 'add-food'});
+    var caloriesWarning = driver.findElement({id: 'calories-warning'});
+
+    name.sendKeys('apple');
+    submitButton.click();
+
+    caloriesWarning.getText().then(function(value) {
+      assert.equal(value, 'Please enter a calorie amount.');
+    });
+
+    calories.sendKeys('100');
+    submitButton.click();
+
+    name.getText().then(function(value){
+      assert.equal(value, '');
+    });
+
+    calories.getText().then(function(value){
+      assert.equal(value, '');
+    });
+
+    caloriesWarning.getText().then(function(value) {
+      assert.equal(value, '');
+    });
+  });
+
   test.it('should allow me to delete a food', function() {
 
     driver.get('http://localhost:8080/foods.html');

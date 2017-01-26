@@ -90,6 +90,50 @@ test.describe('testing exercises', function() {
     });
   });
 
+  test.it('exercises should persist upon browser refresh', function(){
+    driver.get('http://localhost:8080/exercises.html');
+
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
+
+    driver.get("http://localhost:8080/exercises.html");
+    driver.executeScript("return window.localStorage.getItem('exercise-calories');")
+    .then(function(exercisesCalories){
+      assert.equal(exercisesCalories, calArray);
+    });
+  });
+
+  test.it('clears fields and warnings after an exercise successfully saves', function(){
+    driver.get('http://localhost:8080/exercises.html');
+
+    var name = driver.findElement({id: 'exercise-name'});
+    var calories = driver.findElement({id: 'exercise-calories'});
+    var submitButton = driver.findElement({id: 'add-exercise'});
+    var caloriesWarning = driver.findElement({id: 'calories-warning'});
+
+    name.sendKeys('running');
+    submitButton.click();
+
+    caloriesWarning.getText().then(function(value) {
+      assert.equal(value, 'Please enter a calorie amount.');
+    });
+
+    calories.sendKeys('100');
+    submitButton.click();
+
+    name.getText().then(function(value){
+      assert.equal(value, '');
+    });
+
+    calories.getText().then(function(value){
+      assert.equal(value, '');
+    });
+
+    caloriesWarning.getText().then(function(value) {
+      assert.equal(value, '');
+    });
+  });
+
   test.it('should allow me to delete an exercise', function() {
 
     driver.get('http://localhost:8080/exercises.html');
