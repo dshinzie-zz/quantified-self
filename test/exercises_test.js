@@ -112,4 +112,29 @@ test.describe('testing exercises', function() {
       assert.equal(0, event);
     });
   });
+
+  test.it('allows me to edit an exercise', function(){
+    driver.get('http://localhost:8080/exercises.html');
+
+    var name = driver.findElement({id: 'exercise-name'});
+    var calories = driver.findElement({id: 'exercise-calories'});
+    var submitButton = driver.findElement({id: 'add-exercise'});
+
+    name.sendKeys('run');
+    calories.sendKeys('300');
+    submitButton.click();
+
+    driver.sleep(1000);
+
+    var newName = driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'});
+    newName.click();
+    newName.clear();
+    newName.sendKeys('lift');
+    newName.sendKeys(webdriver.Key.ENTER);
+
+    driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'lift')
+    });
+  });
 });
