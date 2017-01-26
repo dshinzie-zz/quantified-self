@@ -1,6 +1,7 @@
 var assert    = require('chai').assert;
 var webdriver = require('selenium-webdriver');
 var test      = require('selenium-webdriver/testing');
+var expect = require('chai').expect;
 
 test.describe('testing exercises', function() {
   var driver;
@@ -16,7 +17,7 @@ test.describe('testing exercises', function() {
     driver.quit();
   })
 
-  test.it('requires a name for adding an exercise', function(){
+  test.xit('requires a name for adding an exercise', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     var calories = driver.findElement({id: 'exercise-calories'});
@@ -31,7 +32,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('requires calories for adding an exercise', function(){
+  test.xit('requires calories for adding an exercise', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     var name = driver.findElement({id: 'exercise-name'});
@@ -46,7 +47,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('should allow me to add a name and a calories', function() {
+  test.xit('should allow me to add a name and a calories', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 
@@ -65,7 +66,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('should allow me to create an exercise', function() {
+  test.xit('should allow me to create an exercise', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 
@@ -82,7 +83,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('exercises should persist upon browser refresh', function(){
+  test.xit('exercises should persist upon browser refresh', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
@@ -95,7 +96,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('clears fields and warnings after an exercise successfully saves', function(){
+  test.xit('clears fields and warnings after an exercise successfully saves', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     var name = driver.findElement({id: 'exercise-name'});
@@ -134,13 +135,12 @@ test.describe('testing exercises', function() {
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(3)'})
     .click();
 
-    driver.findElements({css: '#exercise-table tbody tr td'})
-    .then(function(event){
-      assert.equal(0, event);
-    });
+    var noExercise = driver.findElement({id: "exercise-body"}).innerHTML;
+
+    expect(noExercise).to.be.empty;
   });
 
-  test.it('allows me to edit an exercise after pressing enter', function(){
+  test.xit('allows me to edit an exercise after pressing enter', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     createExercise(driver, "run", 200);
@@ -157,7 +157,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('allows me to edit an exercise after clicking out', function(){
+  test.xit('allows me to edit an exercise after clicking out', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     createExercise(driver, "run", 200);
@@ -174,7 +174,7 @@ test.describe('testing exercises', function() {
     });
   });
 
-  test.it('allows me to filter an exercise', function(){
+  test.xit('allows me to filter an exercise', function(){
     driver.get('http://localhost:8080/exercises.html');
     var filterBox = driver.findElement({css: '#exercise-filter'});
 

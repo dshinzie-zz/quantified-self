@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Diary</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -206,6 +207,20 @@
               <div><label for="food-filter">Filter by</label></div>
               <input type="text" name="food-filter" id="food-filter" value="">
             </div>
+
+            <table id="diary-food-table" class="highlight responsive-table">
+              <thead class="diary-food-table-header">
+                <tr>
+                  <th>Name</th>
+                  <th>Calories</th>
+                </tr>
+              </thead>
+              <tbody id="diary-food-body">
+                <tr>
+                </tr>
+              </tbody>
+            </table>
+
       </div>
 
       <div class="col s6">
@@ -218,10 +233,25 @@
             <div><label for="exercise-filter">Filter by</label></div>
             <input type="text" name="exercise-filter" id="exercise-filter" value="">
           </div>
+
+          <table id="diary-exercise-table" class="highlight responsive-table">
+            <thead class="diary-exercise-table-header">
+              <tr>
+                <th>Name</th>
+                <th>Calories</th>
+              </tr>
+            </thead>
+            <tbody id="diary-exercise-body">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+
       </div>
     </div>
 
   </div>
+  <script src="lib/index.js"></script>
   <script src="main.bundle.js"></script>
 </body>
 </html>
