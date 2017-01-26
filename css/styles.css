@@ -21,3 +21,8 @@
 
 .food-input-container {
 }
+
+tfoot tr td, thead tr th{
+  background-color: #BDBDBD;
+  border-radius: 0px;
+}
