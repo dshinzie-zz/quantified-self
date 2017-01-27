@@ -17,7 +17,7 @@ test.describe('testing foods', function() {
     driver.quit();
   })
 
-  test.xit('requires a name for adding a food', function(){
+  test.it('requires a name for adding a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var calories = driver.findElement({id: 'food-calories'});
@@ -32,7 +32,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('requires calories for adding a food', function(){
+  test.it('requires calories for adding a food', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var name = driver.findElement({id: 'food-name'});
@@ -48,7 +48,7 @@ test.describe('testing foods', function() {
   });
 
 
-  test.xit('should allow me to add a name and a calories', function() {
+  test.it('should allow me to add a name and a calories', function() {
 
     driver.get('http://localhost:8080/foods.html');
 
@@ -67,7 +67,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('should allow me to create a food', function() {
+  test.it('should allow me to create a food', function() {
     driver.get('http://localhost:8080/foods.html');
 
     createFood(driver, "apple", 100);
@@ -83,7 +83,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('foods should persist upon browser refresh', function(){
+  test.it('foods should persist upon browser refresh', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}]);
@@ -96,7 +96,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('clears fields and warnings after a food successfully saves', function(){
+  test.it('clears fields and warnings after a food successfully saves', function(){
     driver.get('http://localhost:8080/foods.html');
 
     var name = driver.findElement({id: 'food-name'});
@@ -140,7 +140,7 @@ test.describe('testing foods', function() {
     expect(noFood).to.be.empty;
   });
 
-  test.xit('allows me to edit a food after pressing enter', function(){
+  test.it('allows me to edit a food after pressing enter', function(){
     driver.get('http://localhost:8080/foods.html');
 
     createFood(driver, "apple", 200);
@@ -157,7 +157,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('allows me to edit a food after clicking out', function(){
+  test.it('allows me to edit a food after clicking out', function(){
     driver.get('http://localhost:8080/foods.html');
 
     createFood(driver, "apple", 200);
@@ -174,7 +174,7 @@ test.describe('testing foods', function() {
     });
   });
 
-  test.xit('allows me to filter a food', function(){
+  test.it('allows me to filter a food', function(){
     driver.get('http://localhost:8080/foods.html');
     var filterBox = driver.findElement({css: '#food-filter'});
 
