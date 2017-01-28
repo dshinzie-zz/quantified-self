@@ -1,6 +1,7 @@
 var assert    = require('chai').assert;
 var webdriver = require('selenium-webdriver');
 var test      = require('selenium-webdriver/testing');
+var expect = require('chai').expect;
 
 test.describe('testing exercises', function() {
   var driver;
@@ -36,7 +37,7 @@ test.describe('testing exercises', function() {
 
     var name = driver.findElement({id: 'exercise-name'});
     var submitButton = driver.findElement({id: 'add-exercise'});
-    var caloriesWarning = driver.findElement({id: 'calories-warning'});
+    var caloriesWarning = driver.findElement({id: 'exercise-calories-warning'});
 
     name.sendKeys('running');
     submitButton.click();
@@ -101,7 +102,7 @@ test.describe('testing exercises', function() {
     var name = driver.findElement({id: 'exercise-name'});
     var calories = driver.findElement({id: 'exercise-calories'});
     var submitButton = driver.findElement({id: 'add-exercise'});
-    var caloriesWarning = driver.findElement({id: 'calories-warning'});
+    var caloriesWarning = driver.findElement({id: 'exercise-calories-warning'});
 
     name.sendKeys('running');
     submitButton.click();
@@ -134,10 +135,9 @@ test.describe('testing exercises', function() {
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(3)'})
     .click();
 
-    driver.findElements({css: '#exercise-table tbody tr td'})
-    .then(function(event){
-      assert.equal(0, event);
-    });
+    var noExercise = driver.findElement({id: "exercise-body"}).innerHTML;
+
+    expect(noExercise).to.be.empty;
   });
 
   test.it('allows me to edit an exercise after pressing enter', function(){
@@ -186,6 +186,21 @@ test.describe('testing exercises', function() {
     driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
     .getText().then(function(event){
       assert.equal(event, 'jog');
+    });
+  });
+
+  test.it('allows me to filter an exercise', function(){
+    driver.get('http://localhost:8080/exercises.html');
+    var filterBox = driver.findElement({css: '#exercise-filter'});
+
+    createExercise(driver, "jogging", 200);
+    createExercise(driver, "running", 100);
+
+    filterBox.sendKeys("ru");
+
+    driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'running');
     });
   });
 

@@ -1,6 +1,7 @@
 var assert    = require('chai').assert;
 var webdriver = require('selenium-webdriver');
 var test      = require('selenium-webdriver/testing');
+var expect = require('chai').expect;
 
 test.describe('testing foods', function() {
   var driver;
@@ -134,10 +135,9 @@ test.describe('testing foods', function() {
     driver.findElement({css: '#food-table tbody tr td:nth-of-type(3)'})
     .click();
 
-    driver.findElements({css: '#food-table tbody tr td'})
-    .then(function(event){
-      assert.equal(0, event);
-    });
+    var noFood = driver.findElement({id: "food-body"}).innerHTML;
+
+    expect(noFood).to.be.empty;
   });
 
   test.it('allows me to edit a food after pressing enter', function(){
