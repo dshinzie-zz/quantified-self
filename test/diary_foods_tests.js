@@ -57,6 +57,23 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.it('allows me to filter a food', function(){
+    driver.get('http://localhost:8080/foods.html');
+    createFood(driver, 'sandwich', '200');
+    createFood(driver, 'burger', '400');
+
+    driver.get("http://localhost:8080/index.html");
+
+    var filterBox = driver.findElement({css: '#diary-food-filter'});
+
+    filterBox.sendKeys("bu");
+
+    driver.findElement({css: '#diary-food-table tbody tr td:nth-of-type(1)'})
+    .getText().then(function(event){
+      assert.equal(event, 'burger');
+    });
+  });
+
   function createFood(driver, nameKeys, calorieKeys){
     var name = driver.findElement({id: 'food-name'});
     var calories = driver.findElement({id: 'food-calories'});
