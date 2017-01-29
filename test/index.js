@@ -17,7 +17,7 @@ test.describe('testing diary', function() {
     driver.quit();
   })
 
-  test.xit('shows a table of all exercises', function(){
+  test.xit('NOT DONE -shows a table of all exercises', function(){
     driver.get('http://localhost:8080/exercises.html');
 
     createExercise(driver, 'jumping', '100');
@@ -28,7 +28,7 @@ test.describe('testing diary', function() {
       assert.equal(exercisesCalories, JSON.stringify([{name: 'jumping', calories: '100'}]));
       driver.sleep(3000);
     });
-  })
+  });
 
   test.xit('adds a selected exercise to table', function(){
 
@@ -65,6 +65,21 @@ test.describe('testing diary', function() {
   });
 
   test.xit('calculates the total remaining calories for breakfast', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'breakfast-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '250')
+    });
+  });
+
+  test.it('total remaining calories for breakfast are red if negative and green if positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -182,6 +197,56 @@ test.describe('testing diary', function() {
     .then(function(textValue){
       assert.equal(textValue, '150')
     });
+  });
+
+  test.xit('displays a totals table', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(1) > th:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'Goal Calories')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(1) > th:nth-child(2)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '2000')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(2) > th:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'Calories Consumed')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(2) > th:nth-child(2)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '0')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(3) > th:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'Calories Burned')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(3) > th:nth-child(2)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '0')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(4) > th:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'Remaining Calories')
+    });
+    driver.findElement({css: '#totals-table > thead > tr:nth-child(4) > th:nth-child(2)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '2000')
+    });
+
+
+
+
   });
 
   test.xit('redirects me to /foods.html when I click on the create new food button', function(){
