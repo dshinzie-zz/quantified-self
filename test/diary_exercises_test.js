@@ -74,6 +74,25 @@ test.describe('testing diary exercises', function() {
     });
   });
 
+  test.it('adds a selected exercise to table', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var exerciseCheckbox = driver.findElement({css: '#diary-exercise-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-selected-exercise'});
+
+    addSelectedButton.click();
+    driver.findElement({css: '#daily-exercise-body > tr:nth-child(1) > td:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'running')
+    });
+  });
+
   function createExercise(driver, nameKeys, calorieKeys){
     var name = driver.findElement({id: 'exercise-name'});
     var calories = driver.findElement({id: 'exercise-calories'});

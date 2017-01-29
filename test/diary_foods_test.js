@@ -74,6 +74,82 @@ test.describe('testing diary foods', function() {
     });
   });
 
+  test.it('adds a selected food to breakfast', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'sandwich', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-breakfast'});
+
+    addSelectedButton.click();
+    driver.findElement({css: '#breakfast-body > tr:nth-child(1) > td:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'sandwich')
+    });
+  });
+
+  test.it('adds a selected food to lunch', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'burger', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-lunch'});
+
+    addSelectedButton.click();
+    driver.findElement({css: '#lunch-body > tr:nth-child(1) > td:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'burger')
+    });
+  });
+
+  test.it('adds a selected food to dinner', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'pasta', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-dinner'});
+
+    addSelectedButton.click();
+    driver.findElement({css: '#dinner-body > tr:nth-child(1) > td:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'pasta')
+    });
+  });
+
+  test.it('adds a selected food to snack', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'candy', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-snack'});
+
+    addSelectedButton.click();
+    driver.findElement({css: '#snack-body > tr:nth-child(1) > td:nth-child(1)'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, 'candy')
+    });
+  });
+
   function createFood(driver, nameKeys, calorieKeys){
     var name = driver.findElement({id: 'food-name'});
     var calories = driver.findElement({id: 'food-calories'});
