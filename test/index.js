@@ -79,6 +79,23 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.xit('re-calculates the total remaining calories for breakfast when foods are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#breakfast-body > tr > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'breakfast-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '300')
+    });
+  });
+
   test.xit('total remaining calories for breakfast are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -136,6 +153,23 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '250')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories for lunch when foods are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#lunch-body > tr > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'lunch-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '500')
     });
   });
 
@@ -199,6 +233,23 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.xit('re-calculates the total remaining calories for dinner when foods are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#dinner-body > tr > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'dinner-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '700')
+    });
+  });
+
   test.xit('total remaining calories for dinner are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -256,6 +307,23 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '50')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories for snack when foods are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#snack-body > tr > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'snack-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '100')
     });
   });
 
