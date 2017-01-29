@@ -172,7 +172,7 @@ test.describe('testing diary foods', function() {
 
   test.xit('should allow me to delete an exercise from lunch', function() {
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'sandwich', calories: '100'}]);
+    var calArray = JSON.stringify([{name: 'burger', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
@@ -192,7 +192,7 @@ test.describe('testing diary foods', function() {
 
   test.xit('should allow me to delete an exercise from dinner', function() {
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'sandwich', calories: '100'}]);
+    var calArray = JSON.stringify([{name: 'pasta', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
@@ -212,7 +212,7 @@ test.describe('testing diary foods', function() {
 
   test.xit('should allow me to delete an exercise from snack', function() {
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'sandwich', calories: '100'}]);
+    var calArray = JSON.stringify([{name: 'candy', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
