@@ -3,7 +3,7 @@ var webdriver = require('selenium-webdriver');
 var test      = require('selenium-webdriver/testing');
 var expect = require('chai').expect;
 
-test.describe('testing diary', function() {
+test.describe('testing diary foods', function() {
   var driver;
   this.timeout(10000);
 
