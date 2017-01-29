@@ -96,6 +96,26 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.xit('re-calculates the total remaining calories for breakfast when foods are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addToBreakfastButton = driver.findElement({id: 'add-breakfast'});
+
+    addToBreakfastButton.click();
+
+    driver.findElement({id: 'breakfast-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '350')
+    });
+  });
+
   test.xit('total remaining calories for breakfast are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -170,6 +190,26 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '500')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories for lunch when foods are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addToBreakfastButton = driver.findElement({id: 'add-lunch'});
+
+    addToBreakfastButton.click();
+
+    driver.findElement({id: 'lunch-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '550')
     });
   });
 
@@ -250,6 +290,26 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.xit('re-calculates the total remaining calories for dinner when foods are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addToBreakfastButton = driver.findElement({id: 'add-dinner'});
+
+    addToBreakfastButton.click();
+
+    driver.findElement({id: 'dinner-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '750')
+    });
+  });
+
   test.xit('total remaining calories for dinner are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -324,6 +384,26 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '100')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories for snack when foods are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addToBreakfastButton = driver.findElement({id: 'add-snack'});
+
+    addToBreakfastButton.click();
+
+    driver.findElement({id: 'snack-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '150')
     });
   });
 
@@ -467,6 +547,57 @@ test.describe('testing diary', function() {
     .getCssValue("color")
     .then(function(rgbaValue){
       assert.equal(rgbaValue, 'rgba(0, 0, 0, 0.870588)')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories for foods are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '1850')
+    });
+
+    driver.findElement({css: '#breakfast-body > tr > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '1900')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories for foods are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '1850')
+    });
+
+    var foodCheckbox = driver.findElement({css: '#diary-food-body > tr > td:nth-child(3) > label'}).click();
+    var addToBreakfastButton = driver.findElement({id: 'add-breakfast'});
+
+    addToBreakfastButton.click();
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '1800')
     });
   });
 
