@@ -7,6 +7,14 @@
   border: 1px solid;
 }
 
+.red-text {
+  color: red !important;
+}
+
+.green-text {
+  color: green;
+}
+
 .food-table-header,
 .exercise-table-header {
   background-color: #d3d3d3;
