@@ -304,6 +304,32 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.xit('exercise burned calories are green if greater than zero', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'exercise-total-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('exercise burned calories are black if zero', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'exercise-total-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(0, 0, 0, 0.870588)')
+    });
+  });
+
   test.xit('displays a totals table', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -348,10 +374,74 @@ test.describe('testing diary', function() {
     .then(function(textValue){
       assert.equal(textValue, '2000')
     });
+  });
 
+  test.xit('total burned calories are green if greater than zero', function(){
 
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray + "');");
 
+    driver.get('http://localhost:8080/index.html');
 
+    driver.findElement({id: 'total-burned-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('total burned calories are black if zero', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(0, 0, 0, 0.870588)')
+    });
+  });
+
+  test.xit('total remaining calories on totals table are green if zero or positive', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '1850')
+    });
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('total remaining calories on totals table are red if negative', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'peach', calories: '2050'}]);
+    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '-50')
+    });
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(255, 0, 0, 1)')
+    });
   });
 
   test.xit('redirects me to /foods.html when I click on the create new food button', function(){
