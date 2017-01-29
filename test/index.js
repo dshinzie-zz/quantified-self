@@ -79,7 +79,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.it('total remaining calories for breakfast are red if negative and green if positive', function(){
+  test.xit('total remaining calories for breakfast are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -88,9 +88,24 @@ test.describe('testing diary', function() {
     driver.get('http://localhost:8080/index.html');
 
     driver.findElement({id: 'breakfast-remaining-calories'})
-    .getText()
-    .then(function(textValue){
-      assert.equal(textValue, '250')
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('total remaining calories for breakfast are red if negative', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '350'}]);
+    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'breakfast-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(255, 0, 0, 1)')
     });
   });
 
@@ -112,7 +127,7 @@ test.describe('testing diary', function() {
   test.xit('calculates the total remaining calories for lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'sandwhich', calories: '200'}, {name: 'juice', calories: '150'}]);
+    var calArray = JSON.stringify([{name: 'sandwich', calories: '200'}, {name: 'juice', calories: '150'}]);
     driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
@@ -121,6 +136,36 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '250')
+    });
+  });
+
+  test.xit('total remaining calories for lunch are green if zero or positive', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'lunch-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('total remaining calories for lunch are red if negative', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'sandwich', calories: '500'}, {name: 'juice', calories: '150'}]);
+    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'lunch-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(255, 0, 0, 1)')
     });
   });
 
@@ -154,6 +199,36 @@ test.describe('testing diary', function() {
     });
   });
 
+  test.xit('total remaining calories for dinner are green if zero or positive', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'dinner-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('total remaining calories for dinner are red if negative', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'beer', calories: '350'}]);
+    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'dinner-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(255, 0, 0, 1)')
+    });
+  });
+
   test.xit('adds the total calories eaten for snack', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -181,6 +256,36 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '50')
+    });
+  });
+
+  test.xit('total remaining calories for snack are green if zero or positive', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'snack-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(76, 175, 80, 1)')
+    });
+  });
+
+  test.xit('total remaining calories for snack are red if negative', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'peach', calories: '225'}]);
+    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'snack-remaining-calories'})
+    .getCssValue("color")
+    .then(function(rgbaValue){
+      assert.equal(rgbaValue, 'rgba(255, 0, 0, 1)')
     });
   });
 
