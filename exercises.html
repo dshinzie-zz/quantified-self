@@ -5,49 +5,52 @@
   <title>Quantified Self - Manage Exercises</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="/css/styles.css">
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
 </head>
 <body>
-  <script src="main.bundle.js"></script>
+  <div class="container">
+    <h3>Manage Exercises</h3>
+    <form class="exercise-input-container" action="exercises.html" method="post">
+      <div class="exercise-input-container">
+        <div class="exercise-label">
+          <div><label for="exercise-name">Name</label></div>
+          <input type="text" name="exercise-name" class="exercise-input" id="exercise-name">
+          <p id="exercise-warning"></p>
+        </div>
 
-  <h3>Manage Exercises</h3>
-  <form class="exercise-input-container" action="exercises.html" method="post">
-    <div class="exercise-input-container">
-      <div class="exercise-label">
-        <div><label for="exercise-name">Name</label></div>
-        <input type="text" name="exercise-name" class="exercise-input" id="exercise-name">
-        <p id="exercise-warning"></p>
+        <div class="exercise-label">
+          <div><label for="exercise-calories">Calories</label></div>
+          <input type="number" name="exercise-calories" class="exercise-input" id="exercise-calories">
+          <p id="exercise-calories-warning"></p>
+        </div>
+
+        <input type="submit" id="add-exercise" value="Add Exercise" style="float: right; position: relative;">
       </div>
+    </form>
 
-      <div class="exercise-label">
-        <div><label for="exercise-calories">Calories</label></div>
-        <input type="number" name="exercise-calories" class="exercise-input" id="exercise-calories">
-        <p id="calories-warning"></p>
-      </div>
-
-      <input type="submit" id="add-exercise" value="Add Exercise" style="float: right; position: relative;">
+    <div class="exercise-label">
+      <div><label for="exercise-filter">Filter by Name</label></div>
+      <input type="text" name="exercise-filter" value="" id="exercise-filter">
     </div>
-  </form>
 
-  <div class="exercise-label">
-    <div><label for="exercise-filter">Filter by Name</label></div>
-    <input type="text" name="exercise-filter" value="" id="exercise-filter">
+    <table id="exercise-table" class="highlight responsive-table">
+      <thead class="exercise-table-header">
+        <tr>
+          <th>Name</th>
+          <th>Calories</th>
+        </tr>
+      </thead>
+      <tbody id="exercise-body">
+        <tr>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 
-  <table id="exercise-table">
-    <thead class="exercise-table-header">
-      <tr>
-        <th>Name</th>
-        <th>Calories</th>
-      </tr>
-    </thead>
-    <tbody id="exercise-body">
-      <tr>
-      </tr>
-    </tbody>
-  </table>
-
-
 </body>
-<script src="lib/exercises.js"></script>
+<script src="main.bundle.js"></script>
 </html>

@@ -5,48 +5,51 @@
   <title>Quantified Self - Manage Foods</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="/css/styles.css">
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
 </head>
 <body>
-  <script src="main.bundle.js"></script>
 
-  <h3>Manage Foods</h3>
-  <form action="foods.html" method="post" class="food-input-container">
-    <div class="food-input-container">
-      <div class="food-label">
-        <div><label for="food-name">Name</label></div>
-        <input type="text" id="food-name" name="food-name" class="food-input">
-        <p id="food-warning"></p>
+  <div class="container">
+    <h3>Manage Foods</h3>
+    <form action="foods.html" method="post" class="food-input-container">
+      <div class="food-input-container">
+        <div class="food-label">
+          <div><label for="food-name">Name</label></div>
+          <input type="text" id="food-name" name="food-name" class="food-input">
+          <p id="food-warning"></p>
+        </div>
+
+        <div class="food-label">
+          <div><label for="food-calories">Calories</label></div>
+          <input type="number" id="food-calories" name="food-calories" class="food-input">
+          <p id="calories-warning"></p>
+        </div>
+
+        <input type="submit" id= "add-food" value="Add Food" style="float: right; position: relative;">
       </div>
+    </form>
 
-      <div class="food-label">
-        <div><label for="food-calories">Calories</label></div>
-        <input type="number" id="food-calories" name="food-calories" class="food-input">
-        <p id="calories-warning"></p>
-      </div>
-
-      <input type="submit" id= "add-food" value="Add Food" style="float: right; position: relative;">
+    <div class="food-label">
+      <div><label for="food-filter">Filter by Name</label></div>
+      <input type="text" name="food-filter" id="food-filter" value="">
     </div>
-  </form>
 
-  <div class="food-label">
-    <div><label for="food-filter">Filter by Name</label></div>
-    <input type="text" name="food-filter" id="food-filter" value="">
+    <table id="food-table" class="highlight responsive-table">
+      <thead class="food-table-header">
+        <tr>
+          <th>Name</th>
+          <th>Calories</th>
+        </tr>
+      </thead>
+      <tbody id="food-body">
+        <tr>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
-  <table id="food-table">
-    <thead class="food-table-header">
-      <tr>
-        <th>Name</th>
-        <th>Calories</th>
-      </tr>
-    </thead>
-    <tbody id="food-body">
-      <tr>
-      </tr>
-    </tbody>
-  </table>
-
 </body>
-<script src="lib/foods.js"></script>
+<script src="main.bundle.js"></script>
 </html>

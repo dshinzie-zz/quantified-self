@@ -3,21 +3,241 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Diary</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 </head>
 <body>
-  <div class="row">
-    <div class="col s4">
-      <h3>Breakfast</h3>
-    </div>
-
-    <div class="col s4">
-      <h3>Lunch</h3>
-    </div>
+  <div class="container">
+  <div>
+    <h4 id="date-header" class="center-align">
+      <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">skip_previous</i></a>
+      January 25, 2017
+      <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">skip_next</i></a>
+    </h4>
   </div>
+    <div class="row">
+      <div class="col s6">
+        <h5>Breakfast</h5>
+        <table class="index-tables highlight responsive-table" id="breakfast-table">
+          <thead class="breakfast-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Total Calories</td>
+              <td id="breakfast-total-calories">0</td>
+            </tr>
+            <tr>
+              <td>Remaining Calories</td>
+              <td id="breakfast-remaining-calories">400</td>
+            </tr>
+          </tfoot>
+          <tbody id="breakfast-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <div class="col s6">
+        <h5>Lunch</h5>
+        <table class="index-tables highlight responsive-table" id="lunch-table">
+          <thead class="lunch-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Total Calories</td>
+              <td id="lunch-total-calories">0</td>
+            </tr>
+            <tr>
+              <td>Remaining Calories</td>
+              <td id="lunch-remaining-calories">600</td>
+            </tr>
+          </tfoot>
+          <tbody id="lunch-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s6">
+        <h5>Dinner</h5>
+        <table class="index-tables highlight responsive-table" id="dinner-table">
+          <thead class="dinner-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Total Calories</td>
+              <td id="dinner-total-calories">0</td>
+            </tr>
+            <tr>
+              <td>Remaining Calories</td>
+              <td id="dinner-remaining-calories">800</td>
+            </tr>
+          </tfoot>
+          <tbody id="dinner-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col s6">
+        <h5>Snacks</h5>
+        <table class="index-tables highlight responsive-table" id="snack-table">
+          <thead class="snack-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Total Calories</td>
+              <td id="snack-total-calories">0</td>
+            </tr>
+            <tr>
+              <td>Remaining Calories</td>
+              <td id="snack-remaining-calories">200</td>
+            </tr>
+          </tfoot>
+          <tbody id="snack-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s6">
+        <h5>Exercise</h5>
+        <table class="index-tables highlight responsive-table" id="daily-exercise-table">
+          <thead class="daily-exercise-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Total Calories</td>
+              <td id="exercise-total-calories">0</td>
+            </tr>
+          </tfoot>
+          <tbody id="daily-exercise-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col s6">
+        <h5>Totals</h5>
+        <table class="index-tables highlight responsive-table" id="totals-table">
+          <thead class="totals-table-header">
+
+            <tr>
+              <th>Goal Calories</th>
+              <th>2000</th>
+            </tr>
+            <tr>
+              <th>Calories Consumed</th>
+              <th id="total-consumed-calories">0</th>
+            </tr>
+            <tr>
+              <th>Calories Burned</th>
+              <th id="total-burned-calories">0</th>
+            </tr>
+            <tr>
+              <th>Remaining Calories</th>
+              <th id="total-remaining-calories">2000</th>
+            </tr>
+          </thead>
+          <tbody id="totals-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s6">
+        <h5>Foods</h5>
+        <a href="/foods.html" class="waves-effect waves-light btn">Create New</a>
+        <h6>Add Selected To</h6>
+        <div class="row">
+          <a id="add-breakfast" class="waves-effect waves-light btn">Breakfast</a>
+          <a id="add-lunch" class="waves-effect waves-light btn">Lunch</a>
+        </div>
+        <div class="row">
+          <a id="add-dinner" class="waves-effect waves-light btn">Dinner</a>
+          <a id="add-snack" class="waves-effect waves-light btn">Snack</a>
+        </div>
+        <div class="filter-label">
+          <div><label for="food-filter">Filter by</label></div>
+          <input type="text" name="food-filter" id="food-filter" value="">
+        </div>
+
+        <table id="diary-food-table" class="highlight responsive-table">
+          <thead class="diary-food-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tbody id="diary-food-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col s6">
+        <h5>Exercises</h5>
+        <div class="row">
+          <a href="/exercises.html" class="waves-effect waves-light btn">Create New</a>
+          <a id="add-selected-exercise" class="waves-effect waves-light btn">Add Selected</a>
+        </div>
+        <div class="filter-label">
+          <div><label for="exercise-filter">Filter by</label></div>
+          <input type="text" name="exercise-filter" id="exercise-filter" value="">
+        </div>
+
+        <table id="diary-exercise-table" class="highlight responsive-table">
+          <thead class="diary-exercise-table-header">
+            <tr>
+              <th>Name</th>
+              <th>Calories</th>
+            </tr>
+          </thead>
+          <tbody id="diary-exercise-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
   <script src="main.bundle.js"></script>
 </body>
 </html>
