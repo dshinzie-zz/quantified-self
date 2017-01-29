@@ -49,6 +49,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// Breakfast Table
   test.xit('adds the total calories eaten for breakfast', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -146,6 +147,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// Lunch Table
   test.xit('adds the total calories eaten for lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -243,6 +245,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// Dinner Table
   test.xit('adds the total calories eaten for dinner', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -340,6 +343,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// Snack Table
   test.xit('adds the total calories eaten for snack', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -437,7 +441,8 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories burned during exercise', function(){
+// Exercise Daily Table
+  test.xit('adds the exercise calories burned during exercise', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}, {name: 'walk', calories: '50'}]);
@@ -449,6 +454,23 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '150')
+    });
+  });
+
+  test.xit('re-calculates the exercise calories burned when exercise is removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}, {name: 'walk', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#daily-exercise-body > tr:nth-child(1) > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'exercise-total-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '100')
     });
   });
 
@@ -478,6 +500,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// Totals Table
   test.xit('displays a totals table', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -524,6 +547,60 @@ test.describe('testing diary', function() {
     });
   });
 
+// Total burned calorie calculations
+  test.xit('re-calculates the total burned calories when exercises are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
+    var calArray2 = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray2 + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '100')
+    });
+
+    driver.findElement({css: '#daily-exercise-body > tr:nth-child(1) > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '0')
+    });
+  });
+
+  test.xit('re-calculates the total burned calories when exercises are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '0')
+    });
+
+    var foodCheckbox = driver.findElement({css: '#diary-exercise-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-selected-exercise'});
+
+    addSelectedButton.click();
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '100')
+    });
+  });
+
   test.xit('total burned calories are green if greater than zero', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -550,6 +627,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// Total remaining calorie calculations
   test.xit('re-calculates the total remaining calories for foods are removed', function(){
 
     driver.get('http://localhost:8080/index.html');
@@ -573,7 +651,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('re-calculates the total remaining calories for foods are added', function(){
+  test.xit('re-calculates the total remaining calories when foods are added', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -598,6 +676,71 @@ test.describe('testing diary', function() {
     .getText()
     .then(function(textValue){
       assert.equal(textValue, '1800')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories when exercises are removed', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
+    var calArray2 = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray2 + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '2100')
+    });
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '100')
+    });
+
+    driver.findElement({css: '#daily-exercise-body > tr:nth-child(1) > td:nth-child(3) > i'}).click();
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '2000')
+    });
+  });
+
+  test.xit('re-calculates the total remaining calories when exercises are added', function(){
+
+    driver.get('http://localhost:8080/index.html');
+
+    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
+
+    driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '2000')
+    });
+
+    driver.findElement({id: 'total-burned-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '0')
+    });
+
+    var foodCheckbox = driver.findElement({css: '#diary-exercise-body > tr > td:nth-child(3) > label'}).click();
+    var addSelectedButton = driver.findElement({id: 'add-selected-exercise'});
+
+    addSelectedButton.click();
+
+    driver.findElement({id: 'total-remaining-calories'})
+    .getText()
+    .then(function(textValue){
+      assert.equal(textValue, '2100')
     });
   });
 
@@ -643,6 +786,7 @@ test.describe('testing diary', function() {
     });
   });
 
+// create food and create exercise button redirects
   test.xit('redirects me to /foods.html when I click on the create new food button', function(){
 
     driver.get('http://localhost:8080/index.html');
