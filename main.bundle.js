@@ -50,6 +50,14 @@
 	var Exercise = __webpack_require__(2);
 	var Storage = __webpack_require__(3);
 
+	var foodStorage = "food-calories";
+	var exerciseStorage = "exercise-calories";
+	var dailyExerciseStorage = "daily-exercise";
+	var breakfastStorage = "daily-breakfast";
+	var lunchStorage = "daily-lunch";
+	var dinnerStorage = "daily-dinner";
+	var snackStorage = "daily-snack";
+
 	// Food Rendering
 	// Add Food
 	$("#add-food").on("click", function (e) {
@@ -63,25 +71,13 @@
 	    addToTable('food-table', $fName, $fCalories);
 	    var food = new Food($fName, $fCalories);
 	    food.store();
-	    clearContents("food-name", "food-calories", "food-warning", "calories-warning");
+	    clearContents("food-name", foodStorage, "food-warning", "calories-warning");
 	  }
 	});
 
 	// Filter Food
 	$("#food-filter").keyup(function () {
-	  var rows = $("#food-body").find("tr").hide();
-
-	  if (this.value.length) {
-	    var data = this.value.split(" ");
-
-	    $.each(data, function (index, value) {
-	      rows.filter(function () {
-	        return $(this).text().toLowerCase().indexOf(value.toLowerCase()) > -1;
-	      }).show();
-	    });
-	  } else {
-	    rows.show();
-	  }
+	  filterTable($(this), "food-body");
 	});
 
 	// Edit Food
@@ -142,25 +138,13 @@
 	    addToTable('exercise-table', $eName, $eCalories);
 	    var exercise = new Exercise($eName, $eCalories);
 	    exercise.store();
-	    clearContents("exercise-name", "exercise-calories", "exercise-warning", "exercise-calories-warning");
+	    clearContents("exercise-name", exerciseStorage, "exercise-warning", "exercise-calories-warning");
 	  }
 	});
 
 	// Filter Exercise
 	$("#exercise-filter").keyup(function () {
-	  var rows = $("#exercise-body").find("tr").hide();
-
-	  if (this.value.length) {
-	    var data = this.value.split(" ");
-
-	    $.each(data, function (index, value) {
-	      rows.filter(function () {
-	        return $(this).text().toLowerCase().indexOf(value.toLowerCase()) > -1;
-	      }).show();
-	    });
-	  } else {
-	    rows.show();
-	  }
+	  filterTable($(this), "exercise-body");
 	});
 
 	// Edit Exercise
@@ -220,7 +204,7 @@
 	  checkedExercises.each(function () {
 	    var name = $(this).find('td:nth-child(1)').text();
 	    var calories = $(this).find('td:nth-child(2)').text();
-	    var storage = new Storage('daily-exercise', name, calories);
+	    var storage = new Storage(dailyExerciseStorage, name, calories);
 	    storage.store();
 	  });
 	  clearCheckboxes('exercise-checkbox');
@@ -235,7 +219,7 @@
 	  var name = $('#daily-exercise-table')[0].rows[rowIndex].cells[0].innerHTML;
 	  var calories = $('#daily-exercise-table')[0].rows[rowIndex].cells[1].innerHTML;
 
-	  var storage = new Storage('daily-exercise', name, calories);
+	  var storage = new Storage(dailyExerciseStorage, name, calories);
 	  storage.delete();
 
 	  $('#daily-exercise-table')[0].deleteRow(rowIndex);
@@ -246,25 +230,25 @@
 
 	// Delete Daily Breakfast
 	$('#breakfast-table').on('click', '.delete-btn', function (row) {
-	  deleteDaily(this, 'breakfast-table', 'daily-breakfast');
+	  deleteDaily(this, 'breakfast-table', breakfastStorage);
 	  addCalories('breakfast-body', 'breakfast-total-calories');
 	});
 
 	// Delete Daily Lunch
 	$('#lunch-table').on('click', '.delete-btn', function (row) {
-	  deleteDaily(this, 'lunch-table', 'daily-lunch');
+	  deleteDaily(this, 'lunch-table', lunchStorage);
 	  addCalories('lunch-body', 'lunch-total-calories');
 	});
 
 	// Delete Daily Dinner
 	$('#dinner-table').on('click', '.delete-btn', function (row) {
-	  deleteDaily(this, 'dinner-table', 'daily-dinner');
+	  deleteDaily(this, 'dinner-table', dinnerStorage);
 	  addCalories('dinner-body', 'dinner-total-calories');
 	});
 
 	// Delete Daily Snack
 	$('#snack-table').on('click', '.delete-btn', function (row) {
-	  deleteDaily(this, 'snack-table', 'daily-snack');
+	  deleteDaily(this, 'snack-table', snackStorage);
 	  addCalories('snack-body', 'snack-total-calories');
 	});
 
@@ -297,6 +281,15 @@
 	  var todaysDate = new Date();
 	  document.getElementById('date-header').innerHTML = todaysDate;
 	}
+
+	// Filter Exercise
+	$("#diary-food-filter").keyup(function () {
+	  filterTable($(this), "diary-food-body");
+	});
+
+	$("#diary-exercise-filter").keyup(function () {
+	  filterTable($(this), "diary-exercise-body");
+	});
 
 	// Shared Functions
 	// Display Table
@@ -350,13 +343,13 @@
 	    var storageId;
 
 	    if (bodyId.includes("breakfast")) {
-	      storageId = 'daily-breakfast';
+	      storageId = breakfastStorage;
 	    } else if (bodyId.includes("lunch")) {
-	      storageId = 'daily-lunch';
+	      storageId = lunchStorage;
 	    } else if (bodyId.includes("dinner")) {
-	      storageId = 'daily-dinner';
+	      storageId = dinnerStorage;
 	    } else {
-	      storageId = 'daily-snack';
+	      storageId = snackStorage;
 	    }
 
 	    var storage = new Storage(storageId, name, calories);
@@ -418,6 +411,7 @@
 
 	  if (exerciseTotal > 0) {
 	    $('#total-burned-calories').addClass('green-text');
+	    $('#exercise-total-calories').addClass('green-text');
 	  }
 
 	  document.getElementById('total-burned-calories').innerHTML = exerciseTotal;
@@ -449,20 +443,36 @@
 	  $(`#${tableId}`)[0].deleteRow(rowIndex);
 	}
 
+	function filterTable(self, bodyId) {
+	  var rows = $(`#${bodyId}`).find("tr").hide();
+
+	  if (self[0].value.length) {
+	    var data = self[0].value.split(" ");
+
+	    $.each(data, function (index, value) {
+	      rows.filter(function () {
+	        return $(this).text().toLowerCase().indexOf(value.toLowerCase()) > -1;
+	      }).show();
+	    });
+	  } else {
+	    rows.show();
+	  }
+	}
+
 	$(document).ready(function () {
-	  displayItems("food-calories", "food-table");
-	  displayItems("exercise-calories", "exercise-table");
+	  displayItems(foodStorage, "food-table");
+	  displayItems(exerciseStorage, "exercise-table");
 
 	  // diary
-	  displayItems("food-calories", "diary-food-table");
-	  displayItems("exercise-calories", "diary-exercise-table");
+	  displayItems(foodStorage, "diary-food-table");
+	  displayItems(exerciseStorage, "diary-exercise-table");
 
 	  // daily dairy
-	  displayItems("daily-exercise", "daily-exercise-table");
-	  displayItems("daily-breakfast", "breakfast-table");
-	  displayItems("daily-lunch", "lunch-table");
-	  displayItems("daily-dinner", "dinner-table");
-	  displayItems("daily-snack", "snack-table");
+	  displayItems(dailyExerciseStorage, "daily-exercise-table");
+	  displayItems(breakfastStorage, "breakfast-table");
+	  displayItems(lunchStorage, "lunch-table");
+	  displayItems(dinnerStorage, "dinner-table");
+	  displayItems(snackStorage, "snack-table");
 
 	  // Calories
 	  displayAllCalories();
