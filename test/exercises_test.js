@@ -178,21 +178,6 @@ test.describe('testing exercises', function() {
     driver.get('http://localhost:8080/exercises.html');
     var filterBox = driver.findElement({css: '#exercise-filter'});
 
-    createExercise(driver, "run", 200);
-    createExercise(driver, "jog", 100);
-
-    filterBox.sendKeys("jo");
-
-    driver.findElement({css: '#exercise-table tbody tr td:nth-of-type(1)'})
-    .getText().then(function(event){
-      assert.equal(event, 'jog');
-    });
-  });
-
-  test.xit('allows me to filter an exercise', function(){
-    driver.get('http://localhost:8080/exercises.html');
-    var filterBox = driver.findElement({css: '#exercise-filter'});
-
     createExercise(driver, "jogging", 200);
     createExercise(driver, "running", 100);
 
