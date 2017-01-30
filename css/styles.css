@@ -34,3 +34,13 @@ tfoot tr td, thead tr th{
   background-color: #BDBDBD;
   border-radius: 0px;
 }
+
+.outer {
+  width: 100%;
+  text-align: center;
+}
+
+.inner {
+  display: inline-block;
+  margin: 5%;
+}
