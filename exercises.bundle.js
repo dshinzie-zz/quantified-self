@@ -10631,42 +10631,6 @@
 	  return today;
 	}
 
-	function getToday() {
-	  var todaysDate = $('#date-header').text();
-	  var storage = new Storage(todaysDate);
-	  storage.setEmptyStorage();
-
-	  updateToday(breakfastStorage, 'breakfast');
-	  updateToday(lunchStorage, 'lunch');
-	  updateToday(dinnerStorage, 'dinner');
-	  updateToday(snackStorage, 'snack');
-	  updateToday(dailyExerciseStorage, 'dailyExercise');
-	}
-
-	function updateToday(storageId, meal) {
-	  var todaysDate = $('#date-header').text();
-	  var mealJSON = JSON.parse(localStorage.getItem(storageId));
-	  var todayParse = JSON.parse(localStorage.getItem(todaysDate));
-	  var mealArray = [];
-
-	  for (var i = 0; i < todayParse.length; i++) {
-	    for (var storageMeal in todayParse[i]) {
-	      mealArray.push(storageMeal);
-	    }
-	  }
-
-	  if (mealArray.indexOf(meal) > -1) {
-	    return;
-	  } else {
-	    var mealObject = {};
-	    mealObject[meal] = mealJSON;
-	    todayParse.push(mealObject);
-
-	    var todayJSON = JSON.stringify(todayParse);
-	    localStorage.setItem(todaysDate, todayJSON);
-	  }
-	}
-
 	module.exports = {
 	  displayItems: displayItems,
 	  addToTable: addToTable,
@@ -10677,9 +10641,7 @@
 	  filterTable: filterTable,
 	  updateDaily: updateDaily,
 	  updateDailyMeals: updateDailyMeals,
-	  formatTodayDate: formatTodayDate,
-	  getToday: getToday,
-	  updateToday: updateToday
+	  formatTodayDate: formatTodayDate
 	};
 
 /***/ },
