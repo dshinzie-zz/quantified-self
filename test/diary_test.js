@@ -17,45 +17,17 @@ test.describe('testing diary', function() {
     driver.quit();
   })
 
-  test.xit('NOT DONE -shows a table of all exercises', function(){
-    driver.get('http://localhost:8080/exercises.html');
-
-    createExercise(driver, 'jumping', '100');
-
-    driver.get("http://localhost:8080/index.html");
-    driver.executeScript("return window.localStorage.getItem('exercise-calories');")
-    .then(function(exercisesCalories){
-      assert.equal(exercisesCalories, JSON.stringify([{name: 'jumping', calories: '100'}]));
-      driver.sleep(3000);
-    });
-  });
-
-  test.xit('adds a selected exercise to table', function(){
-
-    driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
-    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
-
-    driver.get('http://localhost:8080/index.html');
-
-    var exerciseCheckbox = driver.findElement({css: '#diary-exercise-body > tr > td:nth-child(3) > label'}).click();
-    var addSelectedButton = driver.findElement({id: 'add-selected-exercise'});
-
-    addSelectedButton.click();
-    driver.findElement({css: '#daily-exercise-body > tr:nth-child(1) > td:nth-child(1)'})
-    .getText()
-    .then(function(textValue){
-      assert.equal(textValue, 'running')
-    });
-  });
-
-  test.xit('adds the total calories eaten for breakfast', function(){
+  test.it('adds the total calories eaten for breakfast', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-breakfast'}).click();
 
     driver.findElement({id: 'breakfast-total-calories'})
     .getText()
@@ -64,13 +36,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for breakfast', function(){
+  test.it('calculates the total remaining calories for breakfast', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-breakfast'}).click();
 
     driver.findElement({id: 'breakfast-remaining-calories'})
     .getText()
@@ -79,13 +55,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for breakfast are green if zero or positive', function(){
+  test.it('total remaining calories for breakfast are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-breakfast'}).click();
 
     driver.findElement({id: 'breakfast-remaining-calories'})
     .getCssValue("color")
@@ -94,13 +74,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for breakfast are red if negative', function(){
+  test.it('total remaining calories for breakfast are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '350'}]);
-    driver.executeScript("window.localStorage.setItem('daily-breakfast', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-breakfast'}).click();
 
     driver.findElement({id: 'breakfast-remaining-calories'})
     .getCssValue("color")
@@ -109,13 +93,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories eaten for lunch', function(){
+  test.it('adds the total calories eaten for lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'sandwhich', calories: '200'}, {name: 'juice', calories: '150'}]);
-    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+    var calArray = JSON.stringify([{name: 'sandwich', calories: '200'}, {name: 'juice', calories: '150'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-lunch'}).click();
 
     driver.findElement({id: 'lunch-total-calories'})
     .getText()
@@ -124,13 +112,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for lunch', function(){
+  test.it('calculates the total remaining calories for lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '200'}, {name: 'juice', calories: '150'}]);
-    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-lunch'}).click();
 
     driver.findElement({id: 'lunch-remaining-calories'})
     .getText()
@@ -139,13 +131,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for lunch are green if zero or positive', function(){
+  test.it('total remaining calories for lunch are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-lunch'}).click();
 
     driver.findElement({id: 'lunch-remaining-calories'})
     .getCssValue("color")
@@ -154,13 +150,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for lunch are red if negative', function(){
+  test.it('total remaining calories for lunch are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '500'}, {name: 'juice', calories: '150'}]);
-    driver.executeScript("window.localStorage.setItem('daily-lunch', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-lunch'}).click();
 
     driver.findElement({id: 'lunch-remaining-calories'})
     .getCssValue("color")
@@ -169,13 +169,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories eaten for dinner', function(){
+  test.it('adds the total calories eaten for dinner', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'peas', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-dinner'}).click();
 
     driver.findElement({id: 'dinner-total-calories'})
     .getText()
@@ -184,13 +188,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for dinner', function(){
+  test.it('calculates the total remaining calories for dinner', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'peas', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-dinner'}).click();
 
     driver.findElement({id: 'dinner-remaining-calories'})
     .getText()
@@ -199,13 +207,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for dinner are green if zero or positive', function(){
+  test.it('total remaining calories for dinner are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-dinner'}).click();
 
     driver.findElement({id: 'dinner-remaining-calories'})
     .getCssValue("color")
@@ -214,13 +226,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for dinner are red if negative', function(){
+  test.it('total remaining calories for dinner are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'beer', calories: '350'}]);
-    driver.executeScript("window.localStorage.setItem('daily-dinner', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-dinner'}).click();
 
     driver.findElement({id: 'dinner-remaining-calories'})
     .getCssValue("color")
@@ -229,13 +245,16 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories eaten for snack', function(){
+  test.it('adds the total calories eaten for snack', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'oreos', calories: '300'}]);
-    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-snack'}).click();
 
     driver.findElement({id: 'snack-total-calories'})
     .getText()
@@ -244,13 +263,16 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for snack', function(){
+  test.it('calculates the total remaining calories for snack', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'oreos', calories: '150'}]);
-    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-snack'}).click();
 
     driver.findElement({id: 'snack-remaining-calories'})
     .getText()
@@ -259,13 +281,16 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for snack are green if zero or positive', function(){
+  test.it('total remaining calories for snack are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+    var calArray = JSON.stringify([{name: 'oreos', calories: '150'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-snack'}).click();
 
     driver.findElement({id: 'snack-remaining-calories'})
     .getCssValue("color")
@@ -274,13 +299,16 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for snack are red if negative', function(){
+  test.it('total remaining calories for snack are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'peach', calories: '225'}]);
-    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-snack'}).click();
 
     driver.findElement({id: 'snack-remaining-calories'})
     .getCssValue("color")
@@ -289,13 +317,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories burned during exercise', function(){
+  test.it('adds the total calories burned during exercise', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}, {name: 'walk', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+    driver.sleep(1000)
+    driver.findElement({css: '#diary-exercise-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-exercise-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-selected-exercise'}).click();
 
     driver.findElement({id: 'exercise-total-calories'})
     .getText()
@@ -304,13 +336,16 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('exercise burned calories are green if greater than zero', function(){
+  test.it('exercise burned calories are green if greater than zero', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
-    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-exercise-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-selected-exercise'}).click();
 
     driver.findElement({id: 'exercise-total-calories'})
     .getCssValue("color")
@@ -319,7 +354,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('exercise burned calories are black if zero', function(){
+  test.it('exercise burned calories are black if zero', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -330,7 +365,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('displays a totals table', function(){
+  test.it('displays a totals table', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -376,13 +411,16 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total burned calories are green if greater than zero', function(){
+  test.it('total burned calories are green if greater than zero', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
-    driver.executeScript("window.localStorage.setItem('daily-exercise', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-exercise-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-selected-exercise'}).click();
 
     driver.findElement({id: 'total-burned-calories'})
     .getCssValue("color")
@@ -391,7 +429,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total burned calories are black if zero', function(){
+  test.it('total burned calories are black if zero', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -402,13 +440,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories on totals table are green if zero or positive', function(){
+  test.it('total remaining calories on totals table are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
-    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-breakfast'}).click();
 
     driver.findElement({id: 'total-remaining-calories'})
     .getText()
@@ -423,13 +465,17 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories on totals table are red if negative', function(){
+  test.it('total remaining calories on totals table are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
-    var calArray = JSON.stringify([{name: 'peach', calories: '2050'}]);
-    driver.executeScript("window.localStorage.setItem('daily-snack', '" + calArray + "');");
+    var calArray = JSON.stringify([{name: 'apple', calories: '2000'}, {name: 'pear', calories: '50'}]);
+    driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
 
     driver.get('http://localhost:8080/index.html');
+
+    driver.findElement({css: '#diary-food-body > tr:nth-child(1) > td:nth-child(3) > label'}).click();
+    driver.findElement({css: '#diary-food-body > tr:nth-child(2) > td:nth-child(3) > label'}).click();
+    driver.findElement({id: 'add-breakfast'}).click();
 
     driver.findElement({id: 'total-remaining-calories'})
     .getText()
@@ -444,7 +490,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('redirects me to /foods.html when I click on the create new food button', function(){
+  test.it('redirects me to /foods.html when I click on the create new food button', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -458,7 +504,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('redirects me to /exercises.html when I click on the create new food button', function(){
+  test.it('redirects me to /exercises.html when I click on the create new food button', function(){
 
     driver.get('http://localhost:8080/index.html');
 
