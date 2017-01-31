@@ -17,7 +17,7 @@ test.describe('testing diary exercises', function() {
     driver.quit();
   })
 
-  test.it('shows a table of created exercises', function(){
+  test.xit('shows a table of created exercises', function(){
     driver.get('http://localhost:8080/exercises.html');
     createExercise(driver, 'running', '200');
     createExercise(driver, 'jogging', '400');
@@ -31,7 +31,7 @@ test.describe('testing diary exercises', function() {
     });
   });
 
-  test.it('shows a table of with name, calories and checkbox', function(){
+  test.xit('shows a table of with name, calories and checkbox', function(){
     driver.get('http://localhost:8080/exercises.html');
     createExercise(driver, 'running', '200');
     createExercise(driver, 'jogging', '400');
@@ -57,7 +57,7 @@ test.describe('testing diary exercises', function() {
     });
   });
 
-  test.it('allows me to filter a exercise', function(){
+  test.xit('allows me to filter a exercise', function(){
     driver.get('http://localhost:8080/exercises.html');
     createExercise(driver, 'running', '200');
     createExercise(driver, 'jogging', '400');
@@ -74,7 +74,7 @@ test.describe('testing diary exercises', function() {
     });
   });
 
-  test.it('adds a selected exercise to table', function(){
+  test.xit('adds a selected exercise to table', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
@@ -93,7 +93,7 @@ test.describe('testing diary exercises', function() {
     });
   });
 
-  test.it('should allow me to delete an exercise from diary', function() {
+  test.xit('should allow me to delete an exercise from diary', function() {
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('exercise-calories', '" + calArray + "');");

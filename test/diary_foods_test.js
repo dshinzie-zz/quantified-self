@@ -17,7 +17,7 @@ test.describe('testing diary foods', function() {
     driver.quit();
   })
 
-  test.it('shows a table of created foods', function(){
+  test.xit('shows a table of created foods', function(){
     driver.get('http://localhost:8080/foods.html');
     createFood(driver, 'sandwich', '200');
     createFood(driver, 'burger', '400');
@@ -31,7 +31,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('shows a table of with name, calories and checkbox', function(){
+  test.xit('shows a table of with name, calories and checkbox', function(){
     driver.get('http://localhost:8080/foods.html');
     createFood(driver, 'sandwich', '200');
     createFood(driver, 'burger', '400');
@@ -57,7 +57,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('allows me to filter a food', function(){
+  test.xit('allows me to filter a food', function(){
     driver.get('http://localhost:8080/foods.html');
     createFood(driver, 'sandwich', '200');
     createFood(driver, 'burger', '400');
@@ -74,7 +74,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('adds a selected food to breakfast', function(){
+  test.xit('adds a selected food to breakfast', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '100'}]);
@@ -93,7 +93,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('adds a selected food to lunch', function(){
+  test.xit('adds a selected food to lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'burger', calories: '100'}]);
@@ -112,7 +112,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('adds a selected food to dinner', function(){
+  test.xit('adds a selected food to dinner', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'pasta', calories: '100'}]);
@@ -131,7 +131,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('adds a selected food to snack', function(){
+  test.xit('adds a selected food to snack', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'candy', calories: '100'}]);
@@ -150,7 +150,7 @@ test.describe('testing diary foods', function() {
     });
   });
 
-  test.it('should allow me to delete an exercise from breakfast', function() {
+  test.xit('should allow me to delete an exercise from breakfast', function() {
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
@@ -170,7 +170,7 @@ test.describe('testing diary foods', function() {
     expect(noFood).to.be.empty;
   });
 
-  test.it('should allow me to delete an exercise from lunch', function() {
+  test.xit('should allow me to delete an exercise from lunch', function() {
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'burger', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
@@ -190,7 +190,7 @@ test.describe('testing diary foods', function() {
     expect(noFood).to.be.empty;
   });
 
-  test.it('should allow me to delete an exercise from dinner', function() {
+  test.xit('should allow me to delete an exercise from dinner', function() {
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'pasta', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
@@ -210,7 +210,7 @@ test.describe('testing diary foods', function() {
     expect(noFood).to.be.empty;
   });
 
-  test.it('should allow me to delete an exercise from snack', function() {
+  test.xit('should allow me to delete an exercise from snack', function() {
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'candy', calories: '100'}]);
     driver.executeScript("window.localStorage.setItem('food-calories', '" + calArray + "');");
