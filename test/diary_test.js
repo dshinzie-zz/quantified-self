@@ -17,7 +17,7 @@ test.describe('testing diary', function() {
     driver.quit();
   })
 
-  test.xit('adds the total calories eaten for breakfast', function(){
+  test.it('adds the total calories eaten for breakfast', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -36,7 +36,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for breakfast', function(){
+  test.it('calculates the total remaining calories for breakfast', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -55,7 +55,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for breakfast are green if zero or positive', function(){
+  test.it('total remaining calories for breakfast are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -74,7 +74,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for breakfast are red if negative', function(){
+  test.it('total remaining calories for breakfast are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '350'}]);
@@ -93,7 +93,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories eaten for lunch', function(){
+  test.it('adds the total calories eaten for lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '200'}, {name: 'juice', calories: '150'}]);
@@ -112,7 +112,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for lunch', function(){
+  test.it('calculates the total remaining calories for lunch', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '200'}, {name: 'juice', calories: '150'}]);
@@ -131,7 +131,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for lunch are green if zero or positive', function(){
+  test.it('total remaining calories for lunch are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -150,7 +150,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for lunch are red if negative', function(){
+  test.it('total remaining calories for lunch are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'sandwich', calories: '500'}, {name: 'juice', calories: '150'}]);
@@ -169,7 +169,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories eaten for dinner', function(){
+  test.it('adds the total calories eaten for dinner', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'peas', calories: '50'}]);
@@ -188,7 +188,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for dinner', function(){
+  test.it('calculates the total remaining calories for dinner', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'peas', calories: '50'}]);
@@ -207,7 +207,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for dinner are green if zero or positive', function(){
+  test.it('total remaining calories for dinner are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -226,7 +226,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for dinner are red if negative', function(){
+  test.it('total remaining calories for dinner are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'steak', calories: '600'}, {name: 'beer', calories: '350'}]);
@@ -245,7 +245,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories eaten for snack', function(){
+  test.it('adds the total calories eaten for snack', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'oreos', calories: '300'}]);
@@ -263,7 +263,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('calculates the total remaining calories for snack', function(){
+  test.it('calculates the total remaining calories for snack', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'oreos', calories: '150'}]);
@@ -281,7 +281,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for snack are green if zero or positive', function(){
+  test.it('total remaining calories for snack are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'oreos', calories: '150'}]);
@@ -299,7 +299,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories for snack are red if negative', function(){
+  test.it('total remaining calories for snack are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'peach', calories: '225'}]);
@@ -317,7 +317,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('adds the total calories burned during exercise', function(){
+  test.it('adds the total calories burned during exercise', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}, {name: 'walk', calories: '50'}]);
@@ -336,7 +336,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('exercise burned calories are green if greater than zero', function(){
+  test.it('exercise burned calories are green if greater than zero', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
@@ -354,7 +354,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('exercise burned calories are black if zero', function(){
+  test.it('exercise burned calories are black if zero', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -365,7 +365,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('displays a totals table', function(){
+  test.it('displays a totals table', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -411,7 +411,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total burned calories are green if greater than zero', function(){
+  test.it('total burned calories are green if greater than zero', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'running', calories: '100'}]);
@@ -429,7 +429,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total burned calories are black if zero', function(){
+  test.it('total burned calories are black if zero', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -440,7 +440,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories on totals table are green if zero or positive', function(){
+  test.it('total remaining calories on totals table are green if zero or positive', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '100'}, {name: 'pear', calories: '50'}]);
@@ -465,7 +465,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('total remaining calories on totals table are red if negative', function(){
+  test.it('total remaining calories on totals table are red if negative', function(){
 
     driver.get('http://localhost:8080/index.html');
     var calArray = JSON.stringify([{name: 'apple', calories: '2000'}, {name: 'pear', calories: '50'}]);
@@ -490,7 +490,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('redirects me to /foods.html when I click on the create new food button', function(){
+  test.it('redirects me to /foods.html when I click on the create new food button', function(){
 
     driver.get('http://localhost:8080/index.html');
 
@@ -504,7 +504,7 @@ test.describe('testing diary', function() {
     });
   });
 
-  test.xit('redirects me to /exercises.html when I click on the create new food button', function(){
+  test.it('redirects me to /exercises.html when I click on the create new food button', function(){
 
     driver.get('http://localhost:8080/index.html');
 
