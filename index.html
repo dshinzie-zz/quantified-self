@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./css/styles.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
 </head>
 <body>
   <div class="container">
@@ -201,7 +202,7 @@
           <thead class="diary-food-table-header">
             <tr>
               <th>Name</th>
-              <th>Calories</th>
+              <th id="food-calories-table-header">Calories</th>
             </tr>
           </thead>
           <tbody id="diary-food-body">
@@ -228,7 +229,7 @@
           <thead class="diary-exercise-table-header">
             <tr>
               <th>Name</th>
-              <th>Calories</th>
+              <th id="exercise-calories-table-header">Calories</th>
             </tr>
           </thead>
           <tbody id="diary-exercise-body">
