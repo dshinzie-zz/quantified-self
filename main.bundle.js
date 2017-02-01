@@ -49,9 +49,10 @@
 	var Food = __webpack_require__(7);
 	var Exercise = __webpack_require__(2);
 	var Storage = __webpack_require__(3);
-	var Shared = __webpack_require__(4);
-	var Calories = __webpack_require__(5);
-	var SharedStorage = __webpack_require__(6);
+	var GlobalStorage = __webpack_require__(4);
+	var Shared = __webpack_require__(5);
+	var Calories = __webpack_require__(6);
+	var SharedStorage = __webpack_require__(8);
 
 	var foodStorage = "food-calories";
 	var exerciseStorage = "exercise-calories";
@@ -66,6 +67,8 @@
 	  var checkedExercises = $('#diary-exercise-body > tr').filter(':has(:checkbox:checked)');
 	  var deleteButton = "<td><i class='material-icons delete-btn'>delete</i></td>";
 	  var newRow = checkedExercises.clone().append(deleteButton);
+	  var currentDay = $('#date-header').text();
+	  var globalStorage = new GlobalStorage(currentDay);
 
 	  $('#daily-exercise-body > tr:first').before(newRow);
 	  $('#daily-exercise-table tbody tr td label').parent().remove();
@@ -73,18 +76,18 @@
 	  checkedExercises.each(function () {
 	    var name = $(this).find('td:nth-child(1)').text();
 	    var calories = $(this).find('td:nth-child(2)').text();
+
 	    var storage = new Storage(dailyExerciseStorage, name, calories);
 	    storage.store();
 
-	    // Update new global storage
-	    var currentDay = $('#date-header').text();
-	    SharedStorage.updateDayLog(currentDay, 'dailyExercise', storage);
-	    // SharedStorage.updateMasterStorage('dailyExercise', dailyExerciseStorage);
+	    globalStorage.updateDayLog('dailyExercise', storage);
 	  });
 	  Shared.clearCheckboxes('exercise-checkbox');
 	  Calories.addCalories('daily-exercise-body', 'exercise-total-calories');
 	  Calories.totalCaloriesBurned();
 	  Calories.totalCaloriesRemaining();
+
+	  globalStorage.updateIds(currentDay, 'daily-exercise-body', 'dailyExercise', 4);
 	});
 
 	// Delete Daily Exercise
@@ -95,41 +98,40 @@
 
 	  var storage = new Storage(dailyExerciseStorage, name, calories);
 	  storage.delete();
-	  // SharedStorage.updateMasterStorage('dailyExercise', dailyExerciseStorage);
+
 	  var currentDay = $('#date-header').text();
-	  SharedStorage.deleteDayLog(currentDay, 'dailyExercise', storage);
+	  var globalStorage = new GlobalStorage(currentDay);
+	  globalStorage.deleteDayLog('dailyExercise', storage, rowIndex);
 
 	  $('#daily-exercise-table')[0].deleteRow(rowIndex);
 	  Calories.addCalories('daily-exercise-body', 'exercise-total-calories');
+	  globalStorage.updateIds(currentDay, 'daily-exercise-body', 'dailyExercise', 4);
 	});
 
 	// Delete Daily Breakfast
 	$('#breakfast-table').on('click', '.delete-btn', function (row) {
-
-	  SharedStorage.deleteDaily(this, 'breakfast-table', breakfastStorage, 'breakfast');
+	  SharedStorage.deleteFromMeals(this, 'breakfast-table', breakfastStorage, 'breakfast', 0);
 	  Calories.addCalories('breakfast-body', 'breakfast-total-calories');
 	  Calories.updateRemaining('breakfast', 400);
 	});
 
 	// Delete Daily Lunch
 	$('#lunch-table').on('click', '.delete-btn', function (row) {
-
-	  SharedStorage.deleteDaily(this, 'lunch-table', lunchStorage, 'lunch');
+	  SharedStorage.deleteFromMeals(this, 'lunch-table', lunchStorage, 'lunch', 1);
 	  Calories.addCalories('lunch-body', 'lunch-total-calories');
 	  Calories.updateRemaining('lunch', 600);
 	});
 
 	// Delete Daily Dinner
 	$('#dinner-table').on('click', '.delete-btn', function (row) {
-	  SharedStorage.deleteDaily(this, 'dinner-table', dinnerStorage, 'dinner');
+	  SharedStorage.deleteFromMeals(this, 'dinner-table', dinnerStorage, 'dinner', 2);
 	  Calories.addCalories('dinner-body', 'dinner-total-calories');
 	  Calories.updateRemaining('dinner', 800);
 	});
 
 	// Delete Daily Snack
 	$('#snack-table').on('click', '.delete-btn', function (row) {
-
-	  SharedStorage.deleteDaily(this, 'snack-table', snackStorage, 'dinner');
+	  SharedStorage.deleteFromMeals(this, 'snack-table', snackStorage, 'snack', 3);
 	  Calories.addCalories('snack-body', 'snack-total-calories');
 	  Calories.updateRemaining('snack', 200);
 	});
@@ -205,17 +207,23 @@
 	  Calories.totalCaloriesRemaining();
 	}
 
+	$('#food-calories-table-header').on('click', function (e) {
+	  Shared.sortTable(foodStorage, 'diary-food-table');
+	});
+
+	$('#exercise-calories-table-header').on('click', function (e) {
+	  Shared.sortTable(exerciseStorage, 'diary-exercise-table');
+	});
+
 	$(document).ready(function () {
 	  Shared.displayItems(foodStorage, "food-table");
 	  Shared.displayItems(exerciseStorage, "exercise-table");
 
-	  // diary
 	  Shared.displayItems(foodStorage, "diary-food-table");
 	  Shared.displayItems(exerciseStorage, "diary-exercise-table");
 
 	  setDateHeader();
 	  displayDayAndCalories();
-
 	  changeDates();
 	});
 
@@ -340,14 +348,203 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	class GlobalStorage {
+	  constructor(currentDay = null) {
+	    this.currentDay = currentDay;
+	  }
+
+	  setInitialStorage() {
+	    var todayJSON = JSON.parse(localStorage.getItem(this.currentDay));
+	    if (todayJSON == null) {
+	      todayJSON = [{ breakfast: [] }, { lunch: [] }, { dinner: [] }, { snack: [] }, { dailyExercise: [] }];
+	    }
+	    localStorage.setItem(this.currentDay, JSON.stringify(todayJSON));
+	  }
+
+	  // Instance Methods
+	  updateDayLog(storageKey, storage) {
+	    var currentDay = this.currentDay;
+	    var todaysLog = JSON.parse(localStorage.getItem(currentDay));
+
+	    if (storageKey == 'breakfast') {
+	      todaysLog[0][storageKey].push({ name: storage.name, calories: storage.calories });
+	    }
+	    if (storageKey == 'lunch') {
+	      todaysLog[1][storageKey].push({ name: storage.name, calories: storage.calories });
+	    }
+	    if (storageKey == 'dinner') {
+	      todaysLog[2][storageKey].push({ name: storage.name, calories: storage.calories });
+	    }
+	    if (storageKey == 'snack') {
+	      todaysLog[3][storageKey].push({ name: storage.name, calories: storage.calories });
+	    }
+	    if (storageKey == 'dailyExercise') {
+	      todaysLog[4][storageKey].push({ name: storage.name, calories: storage.calories });
+	    }
+
+	    localStorage.setItem(currentDay, JSON.stringify(todaysLog));
+	  }
+
+	  deleteDayLog(storageKey, storage, rowIndex) {
+	    var currentDay = this.currentDay;
+	    var todaysLog = JSON.parse(localStorage.getItem(currentDay));
+
+	    if (storageKey == 'breakfast') {
+	      var log = todaysLog[0][storageKey];
+	      this.deleteIndividual(currentDay, storageKey, storage, log, todaysLog, rowIndex);
+	    }
+	    if (storageKey == 'lunch') {
+	      var log = todaysLog[1][storageKey];
+	      this.deleteIndividual(currentDay, storageKey, storage, log, todaysLog, rowIndex);
+	    }
+	    if (storageKey == 'dinner') {
+	      var log = todaysLog[2][storageKey];
+	      this.deleteIndividual(currentDay, storageKey, storage, log, todaysLog, rowIndex);
+	    }
+	    if (storageKey == 'snack') {
+	      var log = todaysLog[3][storageKey];
+	      this.deleteIndividual(currentDay, storageKey, storage, log, todaysLog, rowIndex);
+	    }
+	    if (storageKey == 'dailyExercise') {
+	      var log = todaysLog[4][storageKey];
+	      this.deleteIndividual(currentDay, storageKey, storage, log, todaysLog, rowIndex);
+	    }
+	  }
+
+	  deleteIndividual(currentDay, storageKey, storage, log, todaysLog, rowIndex) {
+	    for (var i = 0; i < log.length; i++) {
+	      if (log[i].id == rowIndex) {
+	        log.splice(log.indexOf(log[i]), 1);
+	        localStorage.setItem(currentDay, JSON.stringify(todaysLog));
+	      }
+	    }
+	  }
+
+	  // Class Methods
+	  updateFromDaily(storageId, item) {
+	    var todaysDate = this.currentDay;
+	    var itemJSON = JSON.parse(localStorage.getItem(storageId));
+	    var todayParse = JSON.parse(localStorage.getItem(todaysDate));
+	    var itemArray = [];
+
+	    for (var i = 0; i < todayParse.length; i++) {
+	      for (var storageMeal in todayParse[i]) {
+	        itemArray.push(storageMeal);
+	      }
+	    }
+
+	    if (itemArray.indexOf(item) > -1) {
+	      return;
+	    } else {
+	      var itemObject = {};
+	      itemObject[item] = itemJSON;
+	      todayParse.push(itemObject);
+
+	      var todayJSON = JSON.stringify(todayParse);
+	      localStorage.setItem(todaysDate, todayJSON);
+	    }
+	  }
+
+	  updateAll(storageKey, oldName, oldCalories, newName, newCalories) {
+	    var currentDay;
+	    for (var i = 0; i < localStorage.length; i++) {
+	      if (localStorage.key(i).includes('/')) {
+	        currentDay = localStorage.key(i);
+	        var todaysLog = JSON.parse(localStorage.getItem(currentDay));
+
+	        if (storageKey == 'breakfast') {
+	          var log = todaysLog[0][storageKey];
+	          if (log.length > 0) {
+	            this.updateDay(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
+	          }
+	        }
+	        if (storageKey == 'lunch') {
+	          var log = todaysLog[1][storageKey];
+	          if (log.length > 0) {
+	            this.updateDay(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
+	          }
+	        }
+	        if (storageKey == 'dinner') {
+	          var log = todaysLog[2][storageKey];
+	          if (log.length > 0) {
+	            this.updateDay(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
+	          }
+	        }
+	        if (storageKey == 'snack') {
+	          var log = todaysLog[3][storageKey];
+	          if (log.length > 0) {
+	            this.updateDay(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
+	          }
+	        }
+	        if (storageKey == 'dailyExercise') {
+	          var log = todaysLog[4][storageKey];
+	          if (log.length > 0) {
+	            this.updateDay(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  updateDay(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog) {
+	    for (var i = 0; i < log.length; i++) {
+	      if (log[i].name == oldName && log[i].calories == oldCalories) {
+	        log[i].name = newName;
+	        log[i].calories = newCalories;
+	        localStorage.setItem(currentDay, JSON.stringify(todaysLog));
+	      }
+	    }
+	  }
+
+	  updateIds(currentDay, tableBodyId, storageKey, logIndex) {
+	    var todaysLog = JSON.parse(localStorage.getItem(currentDay));
+	    if (storageKey == "breakfast") {
+	      todaysLog[0][storageKey] = [];
+	      this.updateIndividual(currentDay, 'breakfast-body', storageKey, 0, todaysLog);
+	    };
+	    if (storageKey == "lunch") {
+	      todaysLog[1][storageKey] = [];
+	      this.updateIndividual(currentDay, 'lunch-body', storageKey, 1, todaysLog);
+	    };
+	    if (storageKey == "dinner") {
+	      todaysLog[2][storageKey] = [];
+	      this.updateIndividual(currentDay, 'dinner-body', storageKey, 2, todaysLog);
+	    };
+	    if (storageKey == "snack") {
+	      todaysLog[3][storageKey] = [];
+	      this.updateIndividual(currentDay, 'snack-body', storageKey, 3, todaysLog);
+	    };
+	    if (storageKey == "dailyExercise") {
+	      todaysLog[4][storageKey] = [];
+	      this.updateIndividual(currentDay, 'daily-exercise-body', storageKey, 4, todaysLog);
+	    };
+	  }
+
+	  updateIndividual(currentDay, tableBodyId, storageKey, logIndex, todaysLog) {
+	    $(`#${tableBodyId} > tr`).each(function (index) {
+	      var name = $(this).find('td:nth-child(1)').text();
+	      var calories = $(this).find('td:nth-child(2)').text();
+
+	      if (name != "" && calories != "") {
+	        todaysLog[logIndex][storageKey].push({ name: name, calories: calories, id: index + 1 });
+	        localStorage.setItem(currentDay, JSON.stringify(todaysLog));
+	      }
+	    });
+	  }
+	}
+
+	module.exports = GlobalStorage;
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Storage = __webpack_require__(3);
-	var Calories = __webpack_require__(5);
+	var GlobalStorage = __webpack_require__(4);
+	var Calories = __webpack_require__(6);
 
-	var foodStorage = "food-calories";
-	var exerciseStorage = "exercise-calories";
-	var dailyExerciseStorage = "daily-exercise";
 	var breakfastStorage = "daily-breakfast";
 	var lunchStorage = "daily-lunch";
 	var dinnerStorage = "daily-dinner";
@@ -358,7 +555,38 @@
 	  var storage = new Storage(storageId, '', '');
 	  storage.setEmptyStorage();
 
-	  JSON.parse(localStorage.getItem(storageId)).forEach(function (element) {
+	  renderObjectsToTable(JSON.parse(localStorage.getItem(storageId)), tableId);
+	}
+
+	function sortTable(storageId, tableId) {
+	  // clear table
+	  $('#' + tableId + ' > tbody > tr').empty();
+	  var storage = new Storage(storageId, '', '');
+	  storage.setEmptyStorage();
+
+	  var items = JSON.parse(localStorage.getItem(storageId));
+
+	  //get sort attribute
+	  var sort = $('#' + tableId).data('sort');
+	  if (sort === 'asc') {
+	    items = _.orderBy(items, function (i) {
+	      return parseInt(i.calories);
+	    }, 'desc');
+	    $('#' + tableId).data('sort', 'desc');
+	  } else if (sort === 'desc') {
+	    $('#' + tableId).data('sort', null);
+	  } else {
+	    items = _.orderBy(items, function (i) {
+	      return parseInt(i.calories);
+	    }, 'asc');
+	    $('#' + tableId).data('sort', 'asc');
+	  }
+
+	  renderObjectsToTable(items, tableId);
+	}
+
+	function renderObjectsToTable(elements, tableId) {
+	  elements.forEach(function (element) {
 	    addToTable(tableId, element.name, element.calories);
 	  });
 	}
@@ -368,7 +596,7 @@
 	  var rowIndex = $(`#${tableId} > tbody > tr`).length;
 	  var checkBoxFood = `<td><input type='checkbox' class='filled-in food-checkbox' id='food-${rowIndex}'/><label for='food-${rowIndex}'></label></td>`;
 	  var checkBoxExercise = `<td><input type='checkbox' class='filled-in exercise-checkbox' id='exercise-${rowIndex}'/><label for='exercise-${rowIndex}'></label></td>`;
-	  var deleteButton = "<td><i class='material-icons delete-btn'>delete</i></td>";
+	  var deleteButton = "<td class='btn-floating btn-small waves-effect waves-light indigo lighten-1'><i class='material-icons delete-btn'>delete</i></td>";
 	  var itemData = `<tr><td class='edit-cell'>${name}</td><td class='edit-cell'>${calories}</td>${deleteButton}</tr>`;
 	  var diaryFoodData = `<tr><td>${name}</td><td>${calories}</td>${checkBoxFood}</tr>`;
 	  var diaryExerciseData = `<tr><td>${name}</td><td>${calories}</td>${checkBoxExercise}</tr>`;
@@ -380,19 +608,6 @@
 	  } else {
 	    $(`#${tableId} > tbody > tr:first`).before(itemData);
 	  }
-	}
-
-	// Clear contents
-	function clearContents(nameId, caloriesId, nameWarningId, caloriesWarningId) {
-	  $(`#${nameId}`).val('');
-	  $(`#${caloriesId}`).val('');
-	  $(`#${nameWarningId}`).empty();
-	  $(`#${caloriesWarningId}`).empty();
-	}
-
-	// Clear checkboxes
-	function clearCheckboxes(checkboxClass) {
-	  $(`.${checkboxClass}`).prop('checked', false);
 	}
 
 	// Add to Meal Logs
@@ -410,26 +625,33 @@
 	    var calories = $(this).find('td:nth-child(2)').text();
 	    var storageId;
 	    var storageKey;
+	    var tableBodyID;
 
 	    if (bodyId.includes("breakfast")) {
 	      storageId = breakfastStorage;
 	      storageKey = 'breakfast';
+	      tableBodyID = 'breakfast-body';
 	    } else if (bodyId.includes("lunch")) {
 	      storageId = lunchStorage;
 	      storageKey = 'lunch';
+	      tableBodyID = 'lunch-body';
 	    } else if (bodyId.includes("dinner")) {
 	      storageId = dinnerStorage;
 	      storageKey = 'dinner';
+	      tableBodyID = 'dinner-body';
 	    } else {
 	      storageId = snackStorage;
 	      storageKey = 'snack';
+	      tableBodyID = 'snack-body';
 	    }
 
 	    var storage = new Storage(storageId, name, calories);
 	    storage.store();
 
 	    var currentDay = $('#date-header').text();
-	    updateDayLog(currentDay, storageKey, storage);
+	    var globalStorage = new GlobalStorage(currentDay);
+	    globalStorage.updateDayLog(storageKey, storage);
+	    globalStorage.updateIds(currentDay, storageKey, storageKey, 4);
 	  });
 
 	  clearCheckboxes('food-checkbox');
@@ -455,21 +677,17 @@
 	  }
 	}
 
-	// Format Date
-	function formatTodayDate() {
-	  var today = new Date();
-	  var dd = today.getDate();
-	  var mm = today.getMonth() + 1;
-	  var yyyy = today.getFullYear();
+	// Clear contents
+	function clearContents(nameId, caloriesId, nameWarningId, caloriesWarningId) {
+	  $(`#${nameId}`).val('');
+	  $(`#${caloriesId}`).val('');
+	  $(`#${nameWarningId}`).empty();
+	  $(`#${caloriesWarningId}`).empty();
+	}
 
-	  if (dd < 10) {
-	    dd = '0' + dd;
-	  }
-	  if (mm < 10) {
-	    mm = '0' + mm;
-	  }
-	  today = mm + '/' + dd + '/' + yyyy;
-	  return today;
+	// Clear checkboxes
+	function clearCheckboxes(checkboxClass) {
+	  $(`.${checkboxClass}`).prop('checked', false);
 	}
 
 	// Clear Tables for appending for other days
@@ -486,76 +704,20 @@
 	  clearTable('daily-exercise-table');
 	}
 
-	function updateDayLog(currentDay, storageKey, storage) {
-	  // var newStorage = storage;
-	  var todaysLog = JSON.parse(localStorage.getItem(currentDay));
-
-	  if (storageKey == 'breakfast') {
-	    todaysLog[0][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'lunch') {
-	    todaysLog[1][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'dinner') {
-	    todaysLog[2][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'snack') {
-	    todaysLog[3][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'dailyExercise') {
-	    todaysLog[4][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-
-	  localStorage.setItem(currentDay, JSON.stringify(todaysLog));
-	}
-
-	function deleteDayLog(currentDay, storageKey, storage) {
-	  var todaysLog = JSON.parse(localStorage.getItem(currentDay));
-	  if (storageKey == 'breakfast') {
-	    var log = todaysLog[0][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'lunch') {
-	    var log = todaysLog[1][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'dinner') {
-	    var log = todaysLog[2][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'snack') {
-	    var log = todaysLog[3][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'dailyExercise') {
-	    var log = todaysLog[4][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	}
-
-	function deleteIndividual(currentDay, storageKey, storage, log, todaysLog) {
-	  for (var i = 0; i < log.length; i++) {
-	    if (log[i].name == storage.name && log[i].calories == storage.calories) {
-	      log.splice(log.indexOf(log[i]), 1);
-	      localStorage.setItem(currentDay, JSON.stringify(todaysLog));
-	    }
-	  }
-	}
-
 	module.exports = {
 	  displayItems: displayItems,
+	  sortTable: sortTable,
 	  addToTable: addToTable,
 	  clearContents: clearContents,
 	  clearCheckboxes: clearCheckboxes,
 	  addToMeals: addToMeals,
 	  filterTable: filterTable,
-	  formatTodayDate: formatTodayDate,
 	  clearTable: clearTable,
 	  clearAllTables: clearAllTables
 	};
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	function addCalories(table, calorieID) {
@@ -637,290 +799,6 @@
 	};
 
 /***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Shared = __webpack_require__(4);
-	var Storage = __webpack_require__(3);
-	var foodStorage = "food-calories";
-	var exerciseStorage = "exercise-calories";
-	var dailyExerciseStorage = "daily-exercise";
-	var breakfastStorage = "daily-breakfast";
-	var lunchStorage = "daily-lunch";
-	var dinnerStorage = "daily-dinner";
-	var snackStorage = "daily-snack";
-
-	function displayAllLogs() {
-	  var todaysDate = $('#date-header').text();
-	  var todayParse = JSON.parse(localStorage.getItem(todaysDate));
-
-	  Shared.clearAllTables();
-
-	  var todayBreakfast = todayParse[0].breakfast;
-	  for (var i = 0; i < todayBreakfast.length; i++) {
-	    if (todayBreakfast.length > 0) {
-	      Shared.addToTable('breakfast-table', todayBreakfast[i].name, todayBreakfast[i].calories);
-	    }
-	  }
-
-	  var todayLunch = todayParse[1].lunch;
-	  for (var i = 0; i < todayLunch.length; i++) {
-	    if (todayLunch.length > 0) {
-	      Shared.addToTable('lunch-table', todayLunch[i].name, todayLunch[i].calories);
-	    }
-	  }
-
-	  var todayDinner = todayParse[2].dinner;
-	  for (var i = 0; i < todayDinner.length; i++) {
-	    if (todayDinner.length > 0) {
-	      Shared.addToTable('dinner-table', todayDinner[i].name, todayDinner[i].calories);
-	    }
-	  }
-
-	  var todaySnack = todayParse[3].snack;
-	  for (var i = 0; i < todaySnack.length; i++) {
-	    if (todaySnack.length > 0) {
-	      Shared.addToTable('snack-table', todaySnack[i].name, todaySnack[i].calories);
-	    }
-	  }
-
-	  var todayExercise = todayParse[4].dailyExercise;
-	  for (var i = 0; i < todayExercise.length; i++) {
-	    if (todayExercise.length > 0) {
-	      Shared.addToTable('daily-exercise-table', todayExercise[i].name, todayExercise[i].calories);
-	    }
-	  }
-	}
-
-	function updateMasterStorage(storageKey, oldName, oldCalories, newName, newCalories) {
-	  var currentDay;
-	  for (var i = 0; i < localStorage.length; i++) {
-	    if (localStorage.key(i).includes('/')) {
-	      currentDay = localStorage.key(i);
-	      var todaysLog = JSON.parse(localStorage.getItem(currentDay));
-
-	      if (storageKey == 'breakfast') {
-	        var log = todaysLog[0][storageKey];
-	        if (log.length > 0) {
-	          updateMasterIndividual(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
-	        }
-	      }
-	      if (storageKey == 'lunch') {
-	        var log = todaysLog[1][storageKey];
-	        if (log.length > 0) {
-	          updateMasterIndividual(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
-	        }
-	      }
-	      if (storageKey == 'dinner') {
-	        var log = todaysLog[2][storageKey];
-	        if (log.length > 0) {
-	          updateMasterIndividual(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
-	        }
-	      }
-	      if (storageKey == 'snack') {
-	        var log = todaysLog[3][storageKey];
-	        if (log.length > 0) {
-	          updateMasterIndividual(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
-	        }
-	      }
-	      if (storageKey == 'dailyExercise') {
-	        var log = todaysLog[4][storageKey];
-	        if (log.length > 0) {
-	          updateMasterIndividual(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog);
-	        }
-	      }
-	    }
-	  }
-	}
-
-	function updateMasterIndividual(currentDay, oldName, oldCalories, newName, newCalories, log, todaysLog) {
-	  for (var i = 0; i < log.length; i++) {
-	    if (log[i].name == oldName && log[i].calories == oldCalories) {
-	      log[i].name = newName;
-	      log[i].calories = newCalories;
-	      localStorage.setItem(currentDay, JSON.stringify(todaysLog));
-	    }
-	  }
-	}
-
-	function updateAllMeals(oldName, oldCalories, newName, newCalories) {
-	  updateMasterStorage('breakfast', oldName, oldCalories, newName, newCalories);
-	  updateMasterStorage('lunch', oldName, oldCalories, newName, newCalories);
-	  updateMasterStorage('dinner', oldName, oldCalories, newName, newCalories);
-	  updateMasterStorage('snack', oldName, oldCalories, newName, newCalories);
-	}
-
-	function updateDayLog(currentDay, storageKey, storage) {
-	  // var newStorage = storage;
-	  var todaysLog = JSON.parse(localStorage.getItem(currentDay));
-
-	  if (storageKey == 'breakfast') {
-	    todaysLog[0][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'lunch') {
-	    todaysLog[1][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'dinner') {
-	    todaysLog[2][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'snack') {
-	    todaysLog[3][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-	  if (storageKey == 'dailyExercise') {
-	    todaysLog[4][storageKey].push({ name: storage.name, calories: storage.calories });
-	  }
-
-	  localStorage.setItem(currentDay, JSON.stringify(todaysLog));
-	}
-
-	function deleteDayLog(currentDay, storageKey, storage) {
-	  var todaysLog = JSON.parse(localStorage.getItem(currentDay));
-	  if (storageKey == 'breakfast') {
-	    var log = todaysLog[0][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'lunch') {
-	    var log = todaysLog[1][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'dinner') {
-	    var log = todaysLog[2][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'snack') {
-	    var log = todaysLog[3][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	  if (storageKey == 'dailyExercise') {
-	    var log = todaysLog[4][storageKey];
-	    deleteIndividual(currentDay, storageKey, storage, log, todaysLog);
-	  }
-	}
-
-	function deleteIndividual(currentDay, storageKey, storage, log, todaysLog) {
-	  for (var i = 0; i < log.length; i++) {
-	    if (log[i].name == storage.name && log[i].calories == storage.calories) {
-	      log.splice(log.indexOf(log[i]), 1);
-	      localStorage.setItem(currentDay, JSON.stringify(todaysLog));
-	    }
-	  }
-	}
-
-	function setEmptyValues() {
-	  var currentDay = $('#date-header').text();
-	  var todayJSON = JSON.parse(localStorage.getItem(currentDay));
-	  // create initial storage
-	  if (todayJSON.length == 0) {
-	    todayJSON = [{ breakfast: [] }, { lunch: [] }, { dinner: [] }, { snack: [] }, { dailyExercise: [] }];
-	  }
-
-	  // create intial keys
-	  if (todayJSON[0].breakfast == null) {
-	    todayJSON[0].breakfast = [];
-	  }
-	  if (todayJSON[1].lunch == null) {
-	    todayJSON[1].lunch = [];
-	  }
-	  if (todayJSON[2].dinner == null) {
-	    todayJSON[2].dinner = [];
-	  }
-	  if (todayJSON[3].snack == null) {
-	    todayJSON[3].snack = [];
-	  }
-	  if (todayJSON[4].dailyExercise == null) {
-	    todayJSON[4].dailyExercise = [];
-	  }
-
-	  localStorage.setItem(currentDay, JSON.stringify(todayJSON));
-	}
-
-	function getToday() {
-	  var todaysDate = $('#date-header').text();
-	  var storage = new Storage(todaysDate);
-	  storage.setEmptyStorage();
-	  setEmptyValues();
-
-	  updateToday(breakfastStorage, 'breakfast');
-	  updateToday(lunchStorage, 'lunch');
-	  updateToday(dinnerStorage, 'dinner');
-	  updateToday(snackStorage, 'snack');
-	  updateToday(dailyExerciseStorage, 'dailyExercise');
-	}
-
-	function updateToday(storageId, meal) {
-	  var todaysDate = $('#date-header').text();
-	  var mealJSON = JSON.parse(localStorage.getItem(storageId));
-	  var todayParse = JSON.parse(localStorage.getItem(todaysDate));
-	  var mealArray = [];
-
-	  for (var i = 0; i < todayParse.length; i++) {
-	    for (var storageMeal in todayParse[i]) {
-	      mealArray.push(storageMeal);
-	    }
-	  }
-
-	  if (mealArray.indexOf(meal) > -1) {
-	    return;
-	  } else {
-	    var mealObject = {};
-	    mealObject[meal] = mealJSON;
-	    todayParse.push(mealObject);
-
-	    var todayJSON = JSON.stringify(todayParse);
-	    localStorage.setItem(todaysDate, todayJSON);
-	  }
-	}
-
-	// Update daily logs
-	function updateDaily(storageID, oldName, oldCalories, newName, newCalories) {
-	  var dailyMeal = JSON.parse(localStorage.getItem(storageID));
-	  dailyMeal.forEach(function (element) {
-	    if (element.name == oldName && element.calories == oldCalories) {
-	      element.name = newName;
-	      element.calories = newCalories;
-
-	      var dailyMealJSON = JSON.stringify(dailyMeal);
-	      localStorage.setItem(storageID, dailyMealJSON);
-	    }
-	  });
-	}
-
-	function updateDailyMeals(oldName, oldCalories, newName, newCalories) {
-	  updateDaily(breakfastStorage, oldName, oldCalories, newName, newCalories);
-	  updateDaily(lunchStorage, oldName, oldCalories, newName, newCalories);
-	  updateDaily(dinnerStorage, oldName, oldCalories, newName, newCalories);
-	  updateDaily(snackStorage, oldName, oldCalories, newName, newCalories);
-	}
-
-	// Delete from log
-	function deleteDaily(self, tableId, storageId, storageKey) {
-	  var rowIndex = $(self).parent().parent()[0].rowIndex;
-	  var name = $(`#${tableId}`)[0].rows[rowIndex].cells[0].innerHTML;
-	  var calories = $(`#${tableId}`)[0].rows[rowIndex].cells[1].innerHTML;
-
-	  var storage = new Storage(storageId, name, calories);
-	  storage.delete();
-
-	  var currentDay = $('#date-header').text();
-	  deleteDayLog(currentDay, storageKey, storage);
-
-	  $(`#${tableId}`)[0].deleteRow(rowIndex);
-	}
-
-	module.exports = {
-	  displayAllLogs: displayAllLogs,
-	  updateMasterStorage: updateMasterStorage,
-	  getToday: getToday,
-	  updateToday: updateToday,
-	  updateAllMeals: updateAllMeals,
-	  updateDaily: updateDaily,
-	  updateDailyMeals: updateDailyMeals,
-	  deleteDaily: deleteDaily,
-	  updateDayLog: updateDayLog,
-	  deleteDayLog: deleteDayLog
-	};
-
-/***/ },
 /* 7 */
 /***/ function(module, exports) {
 
@@ -981,6 +859,105 @@
 	}
 
 	module.exports = Food;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Shared = __webpack_require__(5);
+	var Storage = __webpack_require__(3);
+	var GlobalStorage = __webpack_require__(4);
+
+	var dailyExerciseStorage = "daily-exercise";
+	var breakfastStorage = "daily-breakfast";
+	var lunchStorage = "daily-lunch";
+	var dinnerStorage = "daily-dinner";
+	var snackStorage = "daily-snack";
+
+	// Set Page Date
+	function getToday() {
+	  var todaysDate = $('#date-header').text();
+	  var globalStorage = new GlobalStorage(todaysDate);
+	  globalStorage.setInitialStorage();
+
+	  globalStorage.updateFromDaily(breakfastStorage, 'breakfast');
+	  globalStorage.updateFromDaily(lunchStorage, 'lunch');
+	  globalStorage.updateFromDaily(dinnerStorage, 'dinner');
+	  globalStorage.updateFromDaily(snackStorage, 'snack');
+	  globalStorage.updateFromDaily(dailyExerciseStorage, 'dailyExercise');
+	}
+
+	// Display data from storage
+	function displayAllLogs() {
+	  var todaysDate = $('#date-header').text();
+	  var todayParse = JSON.parse(localStorage.getItem(todaysDate));
+
+	  Shared.clearAllTables();
+
+	  var todayBreakfast = todayParse[0].breakfast;
+	  for (var i = todayBreakfast.length - 1; i >= 0; i--) {
+	    if (todayBreakfast.length > 0) {
+	      Shared.addToTable('breakfast-table', todayBreakfast[i].name, todayBreakfast[i].calories);
+	    }
+	  }
+	  var todayLunch = todayParse[1].lunch;
+	  for (var i = todayLunch.length - 1; i >= 0; i--) {
+	    if (todayLunch.length > 0) {
+	      Shared.addToTable('lunch-table', todayLunch[i].name, todayLunch[i].calories);
+	    }
+	  }
+	  var todayDinner = todayParse[2].dinner;
+	  for (var i = todayDinner.length - 1; i >= 0; i--) {
+	    if (todayDinner.length > 0) {
+	      Shared.addToTable('dinner-table', todayDinner[i].name, todayDinner[i].calories);
+	    }
+	  }
+	  var todaySnack = todayParse[3].snack;
+	  for (var i = todaySnack.length - 1; i >= 0; i--) {
+	    if (todaySnack.length > 0) {
+	      Shared.addToTable('snack-table', todaySnack[i].name, todaySnack[i].calories);
+	    }
+	  }
+	  var todayExercise = todayParse[4].dailyExercise;
+	  for (var i = todayExercise.length - 1; i >= 0; i--) {
+	    if (todayExercise.length > 0) {
+	      Shared.addToTable('daily-exercise-table', todayExercise[i].name, todayExercise[i].calories);
+	    }
+	  }
+	}
+
+	// Update all meal storage
+	function updateAllMeals(oldName, oldCalories, newName, newCalories) {
+	  var globalStorage = new GlobalStorage();
+	  globalStorage.updateAll('breakfast', oldName, oldCalories, newName, newCalories);
+	  globalStorage.updateAll('lunch', oldName, oldCalories, newName, newCalories);
+	  globalStorage.updateAll('dinner', oldName, oldCalories, newName, newCalories);
+	  globalStorage.updateAll('snack', oldName, oldCalories, newName, newCalories);
+	}
+
+	// Delete from log
+	function deleteFromMeals(self, tableId, storageId, storageKey, logIndex) {
+	  var rowIndex = $(self).parent().parent()[0].rowIndex;
+	  var name = $(`#${tableId}`)[0].rows[rowIndex].cells[0].innerHTML;
+	  var calories = $(`#${tableId}`)[0].rows[rowIndex].cells[1].innerHTML;
+
+	  var storage = new Storage(storageId, name, calories);
+	  storage.delete();
+
+	  var currentDay = $('#date-header').text();
+	  var globalStorage = new GlobalStorage(currentDay);
+	  globalStorage.deleteDayLog(storageKey, storage, rowIndex);
+
+	  $(`#${tableId}`)[0].deleteRow(rowIndex);
+	  globalStorage.updateIds(currentDay, `${storageKey}-body`, storageKey, logIndex);
+	}
+
+	module.exports = {
+	  displayAllLogs: displayAllLogs,
+	  getToday: getToday,
+	  updateAllMeals: updateAllMeals,
+	  deleteFromMeals: deleteFromMeals
+	};
 
 /***/ }
 /******/ ]);
