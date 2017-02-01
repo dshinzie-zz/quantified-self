@@ -3,10 +3,6 @@
   display: block;
 }
 
-#food-table, #exercise-table {
-  border: 1px solid;
-}
-
 .red-text {
   color: red !important;
 }
@@ -15,10 +11,6 @@
   color: green;
 }
 
-.food-table-header,
-.exercise-table-header {
-  background-color: #d3d3d3;
-}
 
 .food-input,
 .food-input-container,
@@ -30,8 +22,8 @@
 .food-input-container {
 }
 
-tfoot tr td, thead tr th{
-  background-color: #BDBDBD;
+tfoot tr td {
+  background-color: #E6E6E6;
   border-radius: 0px;
 }
 
@@ -43,4 +35,15 @@ tfoot tr td, thead tr th{
 .inner {
   display: inline-block;
   margin: 5%;
+}
+
+.meal-buttons {
+  margin: 3.5%;
+  height: 70px !important;
+  width: 70px !important;
+}
+
+#add-selected-exercise{
+  margin-left: 50%;
+  margin-right: 50%;
 }
