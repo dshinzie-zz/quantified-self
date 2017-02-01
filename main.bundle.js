@@ -613,7 +613,7 @@
 	// Add to Meal Logs
 	function addToMeals(bodyId, calorieId) {
 	  var checkedFoods = $('#diary-food-body > tr').filter(':has(:checkbox:checked)');
-	  var deleteButton = "<td><i class='material-icons delete-btn'>delete</i></td>";
+	  var deleteButton = "<td class='btn-floating btn-small waves-effect waves-light indigo lighten-1'><i class='material-icons delete-btn'>delete</i></td>";
 	  var newRow = checkedFoods.clone().append(deleteButton);
 
 	  $(`#${bodyId} > tr:first`).before(newRow);
@@ -705,15 +705,15 @@
 	}
 
 	module.exports = {
-	  displayItems: displayItems,
-	  sortTable: sortTable,
-	  addToTable: addToTable,
-	  clearContents: clearContents,
-	  clearCheckboxes: clearCheckboxes,
-	  addToMeals: addToMeals,
-	  filterTable: filterTable,
-	  clearTable: clearTable,
-	  clearAllTables: clearAllTables
+	  displayItems,
+	  sortTable,
+	  addToTable,
+	  clearContents,
+	  clearCheckboxes,
+	  addToMeals,
+	  filterTable,
+	  clearTable,
+	  clearAllTables
 	};
 
 /***/ },
@@ -790,12 +790,12 @@
 	}
 
 	module.exports = {
-	  addCalories: addCalories,
-	  displayAllCalories: displayAllCalories,
-	  updateRemaining: updateRemaining,
-	  totalCaloriesConsumed: totalCaloriesConsumed,
-	  totalCaloriesBurned: totalCaloriesBurned,
-	  totalCaloriesRemaining: totalCaloriesRemaining
+	  addCalories,
+	  displayAllCalories,
+	  updateRemaining,
+	  totalCaloriesConsumed,
+	  totalCaloriesBurned,
+	  totalCaloriesRemaining
 	};
 
 /***/ },
@@ -953,10 +953,10 @@
 	}
 
 	module.exports = {
-	  displayAllLogs: displayAllLogs,
-	  getToday: getToday,
-	  updateAllMeals: updateAllMeals,
-	  deleteFromMeals: deleteFromMeals
+	  displayAllLogs,
+	  getToday,
+	  updateAllMeals,
+	  deleteFromMeals
 	};
 
 /***/ }
