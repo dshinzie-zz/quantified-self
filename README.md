@@ -4,7 +4,7 @@
 
 ### Introduction
 
-Access this application at [dshinzie.github.io/quantified-self](dshinzie.github.io/quantified-self)
+Access this application at [dshinzie.github.io/quantified-self](https://dshinzie.github.io/quantified-self)
 
 
 Quantified Self is a application that tracks exercise and meal calories for each day to help users achieve a healthier life.
